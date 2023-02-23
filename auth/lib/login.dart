@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:auth/register.dart';
 import 'package:auth/user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -110,7 +109,7 @@ class _LoginState extends State<Login> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a password!';
+                    return 'Please enter a Password!';
                   }
                   return null;
                 },

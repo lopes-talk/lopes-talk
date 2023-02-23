@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:auth/login.dart';
 import 'package:auth/user.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 class Register extends StatefulWidget {
@@ -13,6 +14,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final dateController = TextEditingController();
   //  radioButtons call(none will be selected)
   String? pronouns;
 
@@ -30,6 +32,13 @@ class _RegisterState extends State<Register> {
             .encode({'UserName': user.UserName, 'Password': user.Password}));
 
     print(res.body);
+  }
+
+  @override
+  void dispose() {
+    //  clean controller when widget is reoved
+    dateController.dispose();
+    super.dispose();
   }
 
   @override
@@ -79,7 +88,7 @@ class _RegisterState extends State<Register> {
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter your first name!';
+                    return 'Please enter your First Name!';
                   }
                   return null;
                 },
@@ -102,7 +111,7 @@ class _RegisterState extends State<Register> {
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter your last name!';
+                    return 'Please enter your Last Name!';
                   }
                   return null;
                 },
@@ -129,7 +138,7 @@ class _RegisterState extends State<Register> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a username!';
+                    return 'Please enter a Username!';
                   }
                   return null;
                 },
@@ -156,7 +165,7 @@ class _RegisterState extends State<Register> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a password!';
+                    return 'Please enter a Password!';
                   }
                   return null;
                 },
@@ -166,11 +175,40 @@ class _RegisterState extends State<Register> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: TextField(
+                readOnly: true,
+                controller: dateController,
+                decoration: const InputDecoration(
+                  errorStyle: TextStyle(
+                    fontSize: 18,
+                    color: Color.fromRGBO(137, 0, 0, 1),
+                  ),
+                  border: UnderlineInputBorder(),
+                  hintText: 'Date of Birth',
+                ),
+                style: const TextStyle(fontSize: 20, color: Colors.black),
+                onTap: () async {
+                  var date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100));
+                  if (date != null) {
+                    dateController.text = DateFormat('MM/dd/yyyy').format(date);
+                  }
+                },
+              ),
+            ),
             Column(
               children: [
-                const Text(
-                  "Pronouns",
-                  style: TextStyle(fontSize: 20),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  child: Text(
+                    "Pronouns",
+                    style: TextStyle(fontSize: 20),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -198,6 +236,10 @@ class _RegisterState extends State<Register> {
                         });
                       }),
                 ),
+                // Container(
+                //   padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                //   child: RadioTheme(),
+                // ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: RadioListTile(
@@ -226,45 +268,51 @@ class _RegisterState extends State<Register> {
                 ),
               ],
             ),
-            InkWell(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Login()));
-              },
-              child: const Text(
-                "Already have an Account?",
-                style: TextStyle(
-                  fontFamily: 'Zeyada',
-                  fontSize: 20,
-                  color: Colors.black,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const Login()));
+                },
+                child: const Text(
+                  "Already have an Account?",
+                  style: TextStyle(
+                    fontFamily: 'Zeyada',
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: SizedBox(
-                height: 30,
-                width: 123.28,
-                child: TextButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        save();
-                      }
-                    },
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0.0),
-                        )),
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color.fromRGBO(171, 178, 109, 1))),
-                    child: const Text(
-                      'Register :)',
-                      style: TextStyle(fontSize: 13, color: Colors.black),
-                    )),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 16, 16),
+                child: SizedBox(
+                  height: 33,
+                  width: 125,
+                  child: TextButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          save();
+                        }
+                      },
+                      style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0.0),
+                          )),
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color.fromRGBO(171, 178, 109, 1))),
+                      child: const Text(
+                        'Register :D',
+                        style: TextStyle(fontSize: 15, color: Colors.black),
+                      )),
+                ),
               ),
-            )
+            ),
           ],
         ),
       )),
