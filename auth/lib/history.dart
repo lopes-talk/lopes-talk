@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class History extends StatelessWidget {
   const History({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xfffC4DFCB),
-      child: Center(
-          child: Text(
-        'History',
-        style: TextStyle(
-            color: Colors.green[900],
-            fontSize: 45,
-            fontWeight: FontWeight.w500),
-      )),
+    return Scaffold(
+      backgroundColor: const Color.fromRGBO(233, 231, 206, 1),
+      appBar: AppBar(
+        title: const Text(
+          'History',
+          style: TextStyle(
+            color: Color.fromRGBO(255, 253, 227, 1),
+            fontSize: 28,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
     );
   }
 }

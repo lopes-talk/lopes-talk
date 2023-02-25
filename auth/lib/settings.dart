@@ -7,16 +7,20 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xfffC4DFCB),
-      child: Center(
-          child: Text(
-        'Settings',
-        style: TextStyle(
-            color: Colors.green[900],
-            fontSize: 45,
-            fontWeight: FontWeight.w500),
-      )),
+    return Scaffold(
+      backgroundColor: const Color.fromRGBO(233, 231, 206, 1),
+      appBar: AppBar(
+        title: const Text(
+          'Settings',
+          style: TextStyle(
+            color: Color.fromRGBO(255, 253, 227, 1),
+            fontSize: 28,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
     );
   }
 }

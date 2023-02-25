@@ -1,4 +1,4 @@
-import 'package:auth/home.dart';
+import 'package:auth/redirect.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,26 +14,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Bottom NavBar Demo',
       theme: ThemeData(
-        primaryColor: const Color(0xff2F8D46),
+        primaryColor: const Color.fromRGBO(138, 104, 34, 1),
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         hoverColor: Colors.transparent,
       ),
       debugShowCheckedModeBanner: false,
-      home: const Home(),
+      home: const Redirect(),
     );
   }
 }
-
-// import 'package:auth/home.dart';
-// //import 'package:auth/register.dart';
-// import 'package:flutter/material.dart';
-
-// //import 'Login.dart';
-
-// void main() {
-//   runApp(const MaterialApp(
-//     debugShowCheckedModeBanner: false,
-//     home: Home(),
-//   ));
-// }
