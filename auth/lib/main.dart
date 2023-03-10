@@ -18,6 +18,9 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         hoverColor: Colors.transparent,
+
+        //  default font family
+        //fontFamily: 'sweet purple'
       ),
       debugShowCheckedModeBanner: false,
       home: const Redirect(),

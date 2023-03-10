@@ -67,7 +67,10 @@ class _RedirectState extends State<Redirect> {
                         ),
                   const Text(
                     'Journey',
-                    style: TextStyle(color: Color.fromRGBO(255, 253, 227, 1)),
+                    style: TextStyle(
+                      color: Color.fromRGBO(255, 253, 227, 1),
+                      //fontFamily: ,
+                    ),
                   ),
                 ],
               ),
@@ -144,7 +147,7 @@ class _RedirectState extends State<Redirect> {
                           size: 35,
                         ),
                   const Text(
-                    'Info',
+                    'About',
                     style: TextStyle(color: Color.fromRGBO(255, 253, 227, 1)),
                   ),
                 ],
