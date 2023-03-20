@@ -14,7 +14,7 @@ class Redirect extends StatefulWidget {
 
 class _RedirectState extends State<Redirect> {
   //final _formKey = GlobalKey<FormState>();
-  int pageIndex = 0;
+  int pageIndex = 2;
 
   final pages = [
     const JourneyPath(),

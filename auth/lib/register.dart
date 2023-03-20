@@ -36,7 +36,7 @@ class _RegisterState extends State<Register> {
 
   @override
   void dispose() {
-    //  clean controller when widget is reoved
+    //  clean controller when widget is removed
     dateController.dispose();
     super.dispose();
   }
