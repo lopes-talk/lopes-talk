@@ -3,12 +3,12 @@ package io.mahesh.api.data.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import io.mahesh.api.model.Users;
+import io.mahesh.api.data.entity.UserEntity;
 
-public interface UserRepository extends MongoRepository<Users, String> {
-    @Query("{userName:'?0', password:'?1'}")  
-    Users validateWithUserNameAndPassword(String userName, String password);
-    
-    @Query("{firstName:'?0'}")
-    Users findUserByFirstName(String firstName);
+/*
+ * Interface: UserRepository 
+ */
+public interface UserRepository extends MongoRepository<UserEntity, String> {
+    @Query("{userName:'?0'}")  
+    public UserEntity findByUsername(String username);
 }

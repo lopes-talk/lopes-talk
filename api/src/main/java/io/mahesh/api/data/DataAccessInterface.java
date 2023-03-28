@@ -9,7 +9,7 @@ import java.util.List;
 public interface DataAccessInterface<T> {
     public List<T> findAll();
 
-    public T findById(int id);
+    public T findById(String id);
 
     public void create(T t);
 
