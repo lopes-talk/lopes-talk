@@ -1,14 +1,12 @@
 package io.mahesh.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import io.mahesh.api.data.UsersDataService;
+import com.mongodb.MongoException;
+
 import io.mahesh.api.data.entity.UserEntity;
-import io.mahesh.api.model.Users;
-import io.mahesh.api.util.DatabaseException;
-import io.mahesh.api.util.UnknownUserException;
+import io.mahesh.api.data.repository.UserRepository;
 
 /*
  * Service: User Operations
@@ -16,44 +14,42 @@ import io.mahesh.api.util.UnknownUserException;
 @Service
 public class UserService {
     @Autowired
-    UsersDataService usersDataService;
+    private UserRepository userRepository;
 
-    /**
-     * Register a User
-     * @return 
-     */
-    public Users registerUser(Users user) {
+    public UserEntity getUser(UserEntity user) {
+        System.out.println("Service GET *****");
+        return userRepository.findByUsernameAndPassword(user.getUserName(), user.getPassword());
+    }
+    
+    public boolean getUserByUsername(String userName, String password) {
+        boolean username_present;
+        boolean password_present;
         try {
-            System.out.println(String.format("Encoded password %s : %s", user.getPassword(),
-                    new BCryptPasswordEncoder().encode(user.getPassword())));
-            // encrypt password
-            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-            usersDataService.create(new UserEntity(user));
-        } catch (Exception e) {
-            // Log stack trace & throw custom exception to caller
-            e.printStackTrace();
-            throw new DatabaseException(e, "Database exception");
+            username_present = userRepository.findTopByUsername(userName) != null ? true : false;
+            System.out.println("Username present: " + username_present);
+            password_present = userRepository.findTopByPassword(password) != null ? true : false;
+            System.out.println("Password present: " + password_present);
+        } catch(MongoException nre) {
+            return true;
         }
-        return user;
+        return username_present && password_present;
     }
 
-    /**
-     * Get a user by their ID
-     * @return Users Model for the requested user
-     */
-    public Users findUser(String id) throws UnknownUserException {
+    public boolean findUserByUsername(String userName) {
+        boolean username_present;
         try {
-            // Get user from database
-            UserEntity user = usersDataService.findById(id);
-            // Ensure user exists
-            if(user == null) throw new UnknownUserException();
-            return new Users(user);
-        } catch (UnknownUserException e) {
-            throw e;
-        } catch (Exception e) {
-            // Log stack trace & throw custom exception to caller
-            e.printStackTrace();
-            throw new DatabaseException(e, "Database exception");
+            username_present = userRepository.findTopByUsername(userName) != null ? true : false;
+            System.out.println("userName present (U): " + username_present);
+        } catch(MongoException nre) {
+            return true;
         }
+        return username_present;
+    }
+
+    public void registerUser(UserEntity user) {
+        System.out.println("\tIn UserService of saveUser");
+        System.out.println("\t\tCalling userRepository.save()");
+        userRepository.save(user);
+        System.out.println(user);
     }
 }

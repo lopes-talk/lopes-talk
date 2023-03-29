@@ -23,11 +23,8 @@ public class Users {
     private String lastName;
 
     private String pronouns;
-    // private Pronouns pronouns;
 
     private int age;
-
-    // private List<Tasks> dailyTasks;
 
     /**
      * Id-only contructor
@@ -39,7 +36,7 @@ public class Users {
     }
 
     /**
-     * Converts UserEntity obj ==> UserModel obj
+     * Converts UserEntity obj ==> User Model obj
      */
     public Users(UserEntity user) {
         this._id = user.get_id();

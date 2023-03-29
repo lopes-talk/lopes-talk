@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
- * User Entity to represent the user table in the database
+ * User Entity: Represent the User table in the database
  */
 @Data
 @AllArgsConstructor
@@ -36,7 +36,6 @@ public class UserEntity {
 
     @NonNull
     private String pronouns;
-    //private Pronouns pronouns;
 
     private int age;
 
