@@ -53,9 +53,9 @@ public class JourneyPathController {
         return journeyPathService.getJourneyPathById(id);
     }
 
-    @GetMapping("/journeyPathByName/{name}")
+    @GetMapping("/journeyPathByName/{task}")
     public JourneyPathEntity findJourneyPathByTask(@PathVariable String task) {
-        logger.info("JourneyPath Controller of findJourneyPathByName()\nFinding journey path by String name of {}", task.toString());
+        logger.info("JourneyPath Controller of findJourneyPathByTask()\nFinding journey path by String task of {}", task.toString());
         return journeyPathService.getJourneyPathByTask(task);
     }
 

@@ -95,7 +95,7 @@ class _RedirectState extends State<Redirect> {
                           size: 35,
                         ),
                   const Text(
-                    'Journey',
+                    'History',
                     style: TextStyle(color: Color.fromRGBO(255, 253, 227, 1)),
                   ),
                 ],

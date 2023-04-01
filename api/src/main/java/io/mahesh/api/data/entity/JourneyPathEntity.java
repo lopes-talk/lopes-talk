@@ -1,10 +1,7 @@
 package io.mahesh.api.data.entity;
 
-import java.sql.Date;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.mongodb.lang.NonNull;
 
@@ -25,26 +22,17 @@ public class JourneyPathEntity {
     private String _id;
 
     @NonNull
-    private String task;
+    private String name;
 
     @NonNull
-    private Date dateCompleted;
-
-    @NonNull
-    private boolean status;
-
-    @NonNull
-    @Field(name = "userName")
-    private String userName;
+    private String taskId;
 
     /*
      * Converts JourneyPath Model ==> JourneyPathEntity
      */
     public JourneyPathEntity(JourneyPath user) {
         this._id = user.get_id();
-        this.task = user.getTask();
-        this.dateCompleted = user.getDateCompleted();
-        this.status = user.isStatus();
-        this.userName = user.getUserName();
+        this.name = user.getName();
+        this.taskId = user.getTaskId();
     }
 }

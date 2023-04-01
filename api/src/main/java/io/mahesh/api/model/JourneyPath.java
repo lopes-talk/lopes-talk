@@ -1,7 +1,5 @@
 package io.mahesh.api.model;
 
-import java.sql.Date;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,15 +14,10 @@ public class JourneyPath {
     private String _id;
 
     @NonNull
-    private String task;
+    private String name;
 
     @NonNull
-    private Date dateCompleted;
-
-    private boolean status;
-
-    @NonNull
-    private String userName;
+    private String taskId;
 
     /**
      * Id-only contructor
@@ -40,9 +33,7 @@ public class JourneyPath {
      */
     public JourneyPath(JourneyPathEntity user) {
         this._id = user.get_id();
-        this.task = user.getTask();
-        this.dateCompleted = user.getDateCompleted();
-        this.status = user.isStatus();
-        this.userName = user.getUserName();
+        this.name = user.getName();
+        this.taskId = user.getTaskId();
     }
 }

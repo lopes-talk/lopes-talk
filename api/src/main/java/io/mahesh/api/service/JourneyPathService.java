@@ -45,10 +45,10 @@ public class JourneyPathService {
     }
 
     // PUT
-    public JourneyPathEntity updateJourneyPath(JourneyPathEntity course) {
+    public JourneyPathEntity updateJourneyPath(JourneyPathEntity journeyPath) {
         System.out.println("updates");
-        JourneyPathEntity existing_course = journeyPathRepository.findById(course.get_id()).orElse(null);
-        existing_course.setTask(course.getTask());
+        JourneyPathEntity existing_course = journeyPathRepository.findById(journeyPath.get_id()).orElse(null);
+        existing_course.setName(journeyPath.getName());
         // existing_course.setDateCompleted(course.getDateCompleted());
         // existing_course.setStatus(course.isStatus());
         return journeyPathRepository.save(existing_course);
