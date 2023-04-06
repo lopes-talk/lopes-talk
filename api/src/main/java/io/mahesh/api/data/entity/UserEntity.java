@@ -19,7 +19,7 @@ import lombok.NonNull;
 @Document("Users")
 public class UserEntity {
     @Id
-    private String _id;
+    private String id;
 
     @NonNull
     @Indexed(unique = true)
@@ -43,12 +43,15 @@ public class UserEntity {
      * Converts Users Model ==> UserEntity
      */
     public UserEntity(Users user) {
-        this._id = user.get_id();
+        this.id = user.getId();
         this.userName = user.getUserName();
-        this.password = user.getPassword();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.pronouns = user.getPronouns();
         this.age = user.getAge();
+    }
+
+    public UserEntity(String id) {
+        this.id = id;
     }
 }

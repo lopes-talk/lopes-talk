@@ -6,22 +6,26 @@ import io.mahesh.api.data.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("Users")
 public class Users {
-    private String _id;
+    @NonNull
+    private String id;
 
+    @NonNull
     private String userName;
 
-    private String password;
-
+    @NonNull
     private String firstName;
-
+    
+    @NonNull
     private String lastName;
 
+    @NonNull
     private String pronouns;
 
     private int age;
@@ -31,17 +35,16 @@ public class Users {
      * 
      * @param _id User ID
      */
-    public Users(String _id) {
-        this._id = _id;
+    public Users(String id) {
+        this.id = id;
     }
 
     /**
      * Converts UserEntity obj ==> User Model obj
      */
     public Users(UserEntity user) {
-        this._id = user.get_id();
+        this.id = user.getId();
         this.userName = user.getUserName();
-        this.password = user.getPassword();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.pronouns = user.getPronouns();

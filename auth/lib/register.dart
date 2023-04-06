@@ -19,17 +19,17 @@ class _RegisterState extends State<Register> {
   String? pronouns;
 
   final _formKey = GlobalKey<FormState>();
-  User user = User("", "");
+  User user = User("", "", "");
 
   String url = "http://172.24.241.204:8080/register";
   Future save() async {
     print('in register');
-    print(json.encode({'UserName': user.UserName, 'Password': user.Password}));
+    print(json.encode({'userName': user.userName, 'password': user.password}));
     print(Uri.parse(url));
     var res = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
         body: json
-            .encode({'UserName': user.UserName, 'Password': user.Password}));
+            .encode({'userName': user.userName, 'Password': user.password}));
 
     print(res.body);
   }
@@ -132,9 +132,9 @@ class _RegisterState extends State<Register> {
                   border: UnderlineInputBorder(),
                   labelText: 'Username',
                 ),
-                controller: TextEditingController(text: user.UserName),
+                controller: TextEditingController(text: user.userName),
                 onChanged: (val) {
-                  user.UserName = val;
+                  user.userName = val;
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -159,9 +159,9 @@ class _RegisterState extends State<Register> {
                   border: UnderlineInputBorder(),
                   labelText: 'Password',
                 ),
-                controller: TextEditingController(text: user.Password),
+                controller: TextEditingController(text: user.password),
                 onChanged: (val) {
-                  user.Password = val;
+                  user.password = val;
                 },
                 validator: (value) {
                   if (value!.isEmpty) {

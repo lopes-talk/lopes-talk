@@ -1,6 +1,9 @@
 package io.mahesh.api.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +26,15 @@ public class UserController {
         return userService.getUser(user);
     }
 
+    @GetMapping("/users/{id}")
+    private ResponseEntity<UserEntity> getUserById(@PathVariable("id") String id) {
+        Optional<UserEntity> userOptional = userService.findUserById(id);
+        if(userOptional.isPresent()) {
+            return ResponseEntity.ok(userOptional.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @GetMapping("/login/{userName}&{password}")
     private boolean findUserByUsername(@PathVariable String userName, @PathVariable String password) {
         System.out.println("GET User by userName and password *****");
@@ -33,7 +45,7 @@ public class UserController {
     private boolean registerUser(@RequestBody UserEntity user) {
         System.out.println("In UserController of registerUser");
         boolean user_exits = userService.findUserByUsername(user.getUserName());
-        if(user_exits) {
+        if (user_exits) {
             System.out.println("CANT CREATE USER!");
             return false;
         }

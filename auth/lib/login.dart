@@ -13,17 +13,17 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
-  User user = User("", "");
+  User user = User("", "", "");
 
   String url = "http://172.24.241.204:8080/login";
   Future save() async {
     print('in login');
-    print(json.encode({'UserName': user.UserName, 'Password': user.Password}));
+    print(json.encode({'userName': user.userName, 'Password': user.password}));
     print(Uri.parse(url));
     var res = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
         body: json
-            .encode({'UserName': user.UserName, 'Password': user.Password}));
+            .encode({'userName': user.userName, 'Password': user.password}));
 
     print(res.body);
     if (res.body != null) {
@@ -74,15 +74,15 @@ class _LoginState extends State<Login> {
                     color: Color.fromRGBO(137, 0, 0, 1),
                   ),
                   border: UnderlineInputBorder(),
-                  labelText: 'Username',
+                  labelText: 'userName',
                 ),
-                controller: TextEditingController(text: user.UserName),
+                controller: TextEditingController(text: user.userName),
                 onChanged: (val) {
-                  user.UserName = val;
+                  user.userName = val;
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a Username!';
+                    return 'Please enter a UserName!';
                   }
                   return null;
                 },
@@ -103,9 +103,9 @@ class _LoginState extends State<Login> {
                   border: UnderlineInputBorder(),
                   labelText: 'Password',
                 ),
-                controller: TextEditingController(text: user.Password),
+                controller: TextEditingController(text: user.password),
                 onChanged: (val) {
-                  user.Password = val;
+                  user.password = val;
                 },
                 validator: (value) {
                   if (value!.isEmpty) {

@@ -1,5 +1,7 @@
 package io.mahesh.api.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +53,15 @@ public class UserService {
         System.out.println("\t\tCalling userRepository.save()");
         userRepository.save(user);
         System.out.println(user);
+    }
+
+    public Optional<UserEntity> findUserById(String _id) {
+        System.out.println("User Service finding user with id: " + _id);
+        try {
+            return userRepository.findById(_id);
+        } catch (MongoException e) {
+            System.out.println("Error finding user");
+            return null;
+        }
     }
 }

@@ -2,8 +2,8 @@ import 'package:auth/addTask.dart';
 import 'package:auth/editTask.dart';
 import 'package:flutter/material.dart';
 
-class SeeMore extends StatelessWidget {
-  const SeeMore({super.key});
+class SeeMoreMental extends StatelessWidget {
+  const SeeMoreMental({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class SeeMore extends StatelessWidget {
         backgroundColor: const Color.fromRGBO(233, 231, 206, 1),
         appBar: AppBar(
           title: const Text(
-            '"Journey Name"',
+            'Mental',
             style: TextStyle(
               color: Color.fromRGBO(255, 253, 227, 1),
               fontSize: 28,

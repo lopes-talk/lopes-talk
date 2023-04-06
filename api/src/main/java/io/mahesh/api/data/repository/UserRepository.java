@@ -1,5 +1,7 @@
 package io.mahesh.api.data.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,4 +21,6 @@ public interface UserRepository extends MongoRepository<UserEntity, String> {
 
     @Query("{password:'?0'}")  
     UserEntity findTopByPassword(String password);
+
+    Optional<UserEntity> findById(String _id);
 }
