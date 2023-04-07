@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:auth/login.dart';
-import 'package:auth/user.dart';
+import 'package:auth/models/user.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+
+import 'login.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -19,7 +19,7 @@ class _RegisterState extends State<Register> {
   String? pronouns;
 
   final _formKey = GlobalKey<FormState>();
-  User user = User("", "", "");
+  User user = User(id: -1, userName: '', email: '', password: '');
 
   String url = "http://172.24.241.204:8080/register";
   Future save() async {
@@ -88,7 +88,7 @@ class _RegisterState extends State<Register> {
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter your First Name!';
+                    return 'Please enter your first name!';
                   }
                   return null;
                 },
@@ -111,7 +111,7 @@ class _RegisterState extends State<Register> {
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter your Last Name!';
+                    return 'Please enter your last name!';
                   }
                   return null;
                 },
@@ -138,7 +138,7 @@ class _RegisterState extends State<Register> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a Username!';
+                    return 'Please enter a username!';
                   }
                   return null;
                 },
@@ -165,7 +165,7 @@ class _RegisterState extends State<Register> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a Password!';
+                    return 'Please enter a password!';
                   }
                   return null;
                 },
@@ -173,32 +173,6 @@ class _RegisterState extends State<Register> {
                   fontSize: 20,
                   color: Colors.black,
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextField(
-                readOnly: true,
-                controller: dateController,
-                decoration: const InputDecoration(
-                  errorStyle: TextStyle(
-                    fontSize: 18,
-                    color: Color.fromRGBO(137, 0, 0, 1),
-                  ),
-                  border: UnderlineInputBorder(),
-                  hintText: 'Date of Birth',
-                ),
-                style: const TextStyle(fontSize: 20, color: Colors.black),
-                onTap: () async {
-                  var date = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2100));
-                  if (date != null) {
-                    dateController.text = DateFormat('MM/dd/yyyy').format(date);
-                  }
-                },
               ),
             ),
             Column(

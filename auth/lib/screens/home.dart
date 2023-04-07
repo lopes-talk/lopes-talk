@@ -1,11 +1,12 @@
+import 'package:flutter/material.dart';
+
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
+import '../widgets/homeTaskCard.dart';
 import 'package:http/http.dart' as http;
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +30,14 @@ class Home extends StatelessWidget {
             children: [
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(12),
                   child: Quote(),
                 ),
               ),
-              const Divider(
-                color: Colors.black,
-                height: 25,
-                thickness: 1,
-                indent: 30,
-                endIndent: 30,
-              ),
               const Image(
+                width: 450,
                 height: 350,
                 image: AssetImage('android/assests/Lopey-removebg-preview.png'),
-                // image: AssetImage('android/assests/THEFavorite.jpeg'),
               ),
               const Padding(
                 padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
@@ -57,7 +51,7 @@ class Home extends StatelessWidget {
                   ),
                 ),
               ),
-              const TaskCard(title: 'Task to Complete', body: ""),
+              const HomeTaskCard(title: 'Task to Complete', body: ""),
             ],
           ),
         ));
@@ -115,60 +109,5 @@ Future<Map<String, dynamic>> _getQuote() async {
     return {'quote': quote, 'author': author};
   } else {
     throw Exception('Failed to load quote');
-  }
-}
-
-class TaskCard extends StatelessWidget {
-  const TaskCard({
-    Key? key,
-    required this.title,
-    required this.body,
-  }) : super(key: key);
-
-  final String title;
-  final String body;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-          child: Card(
-            color: const Color.fromRGBO(127, 102, 74, 1),
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      title,
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 15,
-                        color: Color.fromRGBO(234, 225, 186, 1),
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromRGBO(171, 178, 109, 1),
-                          minimumSize: const Size(250, 29)),
-                      child: const Text(
-                        'Complete',
-                        style: TextStyle(fontSize: 13, color: Colors.black),
-                      )),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }

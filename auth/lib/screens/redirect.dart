@@ -1,9 +1,10 @@
-import 'package:auth/about.dart';
-import 'package:auth/history.dart';
-import 'package:auth/home.dart';
-import 'package:auth/journeyPath.dart';
-import 'package:auth/settings.dart';
+import 'package:auth/screens/about.dart';
+import 'package:auth/screens/history.dart';
+import 'package:auth/screens/home.dart';
+import 'package:auth/screens/settings.dart';
 import 'package:flutter/material.dart';
+
+import 'journeyPath.dart';
 
 class Redirect extends StatefulWidget {
   const Redirect({super.key});
@@ -17,10 +18,10 @@ class _RedirectState extends State<Redirect> {
   int pageIndex = 2;
 
   final pages = [
-    const JourneyPath(),
-    const History(),
-    const Home(),
-    const About(),
+    const JourneyPathScreen(),
+    const HistoryScreen(),
+    const HomeScreen(),
+    const AboutScreen(),
     const Settings(),
   ];
 

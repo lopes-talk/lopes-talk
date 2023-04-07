@@ -1,12 +1,7 @@
-import 'package:auth/seeMoreEmotional.dart';
-import 'package:auth/seeMoreMental.dart';
-import 'package:auth/seeMorePhysical.dart';
-import 'package:auth/seeMorePractical.dart';
-import 'package:auth/seeMoreSocial.dart';
 import 'package:flutter/material.dart';
 
-class JourneyPath extends StatelessWidget {
-  const JourneyPath({super.key});
+class JourneyPathScreen extends StatelessWidget {
+  const JourneyPathScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +52,8 @@ class JourneyPath extends StatelessWidget {
                                       const EdgeInsets.fromLTRB(8, 0, 8, 0),
                                   child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const SeeMoreEmotional()));
+                                        Navigator.pushNamed(
+                                            context, '/journeyEmotional');
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color.fromRGBO(
@@ -127,11 +119,8 @@ class JourneyPath extends StatelessWidget {
                                       const EdgeInsets.fromLTRB(8, 0, 8, 0),
                                   child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const SeeMoreMental()));
+                                        Navigator.pushNamed(
+                                            context, '/journeyMental');
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color.fromRGBO(
@@ -197,11 +186,8 @@ class JourneyPath extends StatelessWidget {
                                       const EdgeInsets.fromLTRB(8, 0, 8, 0),
                                   child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const SeeMorePhysical()));
+                                        Navigator.pushNamed(
+                                            context, '/journeyPhysical');
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color.fromRGBO(
@@ -267,11 +253,8 @@ class JourneyPath extends StatelessWidget {
                                       const EdgeInsets.fromLTRB(8, 0, 8, 0),
                                   child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const SeeMorePractical()));
+                                        Navigator.pushNamed(
+                                            context, '/journeyPractical');
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color.fromRGBO(
@@ -337,11 +320,8 @@ class JourneyPath extends StatelessWidget {
                                       const EdgeInsets.fromLTRB(8, 0, 8, 0),
                                   child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const SeeMoreSocial()));
+                                        Navigator.pushNamed(
+                                            context, '/journeySocial');
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color.fromRGBO(

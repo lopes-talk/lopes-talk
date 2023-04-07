@@ -1,9 +1,9 @@
-import 'package:auth/addTask.dart';
-import 'package:auth/editTask.dart';
+import 'addTask.dart';
+import 'editTask.dart';
 import 'package:flutter/material.dart';
 
-class SeeMorePractical extends StatelessWidget {
-  const SeeMorePractical({super.key});
+class SeeMorePhysicalScreen extends StatelessWidget {
+  const SeeMorePhysicalScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class SeeMorePractical extends StatelessWidget {
         backgroundColor: const Color.fromRGBO(233, 231, 206, 1),
         appBar: AppBar(
           title: const Text(
-            'Practical',
+            'Physical',
             style: TextStyle(
               color: Color.fromRGBO(255, 253, 227, 1),
               fontSize: 28,
@@ -51,8 +51,10 @@ class TaskCard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const AddTask()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddTaskScreen()));
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(171, 178, 109, 1),
@@ -94,7 +96,7 @@ class TaskCard extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const EditTask()));
+                                            const EditTaskScreen()));
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor:

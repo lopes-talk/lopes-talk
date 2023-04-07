@@ -70,11 +70,72 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  flutter_riverpod:
+    dependency: "direct main"
+    description:
+      name: flutter_riverpod
+      sha256: "7ccf1f98a906a91b1f4e95dea81b4b571d95049a59c54b79d57a2954b0285afe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  google_identity_services_web:
+    dependency: transitive
+    description:
+      name: google_identity_services_web
+      sha256: "7940fdc3b1035db4d65d387c1bdd6f9574deaa6777411569c05ecc25672efacd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
+  google_sign_in:
+    dependency: "direct main"
+    description:
+      name: google_sign_in
+      sha256: "776a4c988dc179c3b8e9201de0ad61bf350a4e75d378ff9d94c76880378c7bca"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.0"
+  google_sign_in_android:
+    dependency: transitive
+    description:
+      name: google_sign_in_android
+      sha256: "6a740e8498920ecf5fc2849ae0e4412536d700230bc3169493a1d031fdfe1cca"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.8"
+  google_sign_in_ios:
+    dependency: transitive
+    description:
+      name: google_sign_in_ios
+      sha256: "2e1df687b17f7fddcaf9a0c7f994d0d19b5d41e8ce1d943013befd0a0ae67403"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.6.1"
+  google_sign_in_platform_interface:
+    dependency: transitive
+    description:
+      name: google_sign_in_platform_interface
+      sha256: "95a9e0a8701b5485f2ca330fd1fc6f918f5ce088042ce1019c5e389d8574ae4c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
+  google_sign_in_web:
+    dependency: transitive
+    description:
+      name: google_sign_in_web
+      sha256: "7e0ec507f4752383a6daa67d0cc775253cfc3b1d87907e7004e2c1b99c0a723f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.12.0"
   http:
     dependency: "direct main"
     description:
@@ -91,14 +152,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
-  intl:
-    dependency: "direct main"
-    description:
-      name: intl
-      sha256: a3715e3bc90294e971cb7dc063fbf3cd9ee0ebf8604ffeafabd9e6f16abbdbe6
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.18.0"
   js:
     dependency: transitive
     description:
@@ -147,6 +200,54 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.2"
+  plugin_platform_interface:
+    dependency: transitive
+    description:
+      name: plugin_platform_interface
+      sha256: "6a2128648c854906c53fa8e33986fc0247a1116122f9534dd20e3ab9e16a32bc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.4"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      sha256: b1c1ac5ce6688d77f65f3375a9abb9319b3cb32486bdc7a1e0fdf004d7ba4e47
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.1"
+  riverpod:
+    dependency: transitive
+    description:
+      name: riverpod
+      sha256: fc63714de93a4660142d280e13f058137ba586510c825dce3b7c7d4c4714b585
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.3"
+  sign_in_with_apple:
+    dependency: "direct main"
+    description:
+      name: sign_in_with_apple
+      sha256: ac3b113767dfdd765078c507dad9d4d9fe96b669cc7bd88fc36fc15376fb3400
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.0"
+  sign_in_with_apple_platform_interface:
+    dependency: transitive
+    description:
+      name: sign_in_with_apple_platform_interface
+      sha256: a5883edee09ed6be19de19e7d9f618a617fe41a6fa03f76d082dfb787e9ea18d
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  sign_in_with_apple_web:
+    dependency: transitive
+    description:
+      name: sign_in_with_apple_web
+      sha256: "44b66528f576e77847c14999d5e881e17e7223b7b0625a185417829e5306f47a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -168,6 +269,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  state_notifier:
+    dependency: transitive
+    description:
+      name: state_notifier
+      sha256: "8fe42610f179b843b12371e40db58c9444f8757f8b69d181c97e50787caed289"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.2+1"
   stream_channel:
     dependency: transitive
     description:
@@ -217,4 +326,5 @@ packages:
     source: hosted
     version: "2.1.4"
 sdks:
-  dart: ">=2.19.2 <3.0.0"
+  dart: ">=2.19.3 <3.0.0"
+  flutter: ">=3.3.0"

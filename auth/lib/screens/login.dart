@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:auth/user.dart';
+import 'package:auth/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,7 +13,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
-  User user = User("", "", "");
+  User user = User(id: -1, userName: '', email: '', password: '');
 
   String url = "http://172.24.241.204:8080/login";
   Future save() async {
@@ -74,7 +74,7 @@ class _LoginState extends State<Login> {
                     color: Color.fromRGBO(137, 0, 0, 1),
                   ),
                   border: UnderlineInputBorder(),
-                  labelText: 'userName',
+                  labelText: 'Username',
                 ),
                 controller: TextEditingController(text: user.userName),
                 onChanged: (val) {
@@ -82,7 +82,7 @@ class _LoginState extends State<Login> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a UserName!';
+                    return 'Please enter a username!';
                   }
                   return null;
                 },
@@ -109,7 +109,7 @@ class _LoginState extends State<Login> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a Password!';
+                    return 'Please enter a password!';
                   }
                   return null;
                 },
@@ -121,8 +121,11 @@ class _LoginState extends State<Login> {
             ),
             InkWell(
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/register');
               },
+              // onTap: () {
+              //   Navigator.pop(context, '');
+              // },
               child: const Text(
                 "Don't have an Account?",
                 style: TextStyle(
