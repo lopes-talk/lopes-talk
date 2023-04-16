@@ -2,13 +2,18 @@ package io.mahesh.api.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import io.mahesh.api.data.entity.TasksEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Tasks {
-    @NonNull
     private String id;
 
     @NonNull
@@ -16,13 +21,14 @@ public class Tasks {
 
     private boolean status;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date dateCompleted;
 
     @NonNull
     private String userId;
     
     @NonNull
-    private String pathId;
+    private String journeyId;
 
     /**
      * Id-only contructor
@@ -41,7 +47,16 @@ public class Tasks {
         this.name = task.getName();
         this.status = task.isStatus();
         this.dateCompleted = task.getDateCompleted();
-        this.pathId = task.getPathId();
+        if(task.getJourney() != null) {
+            this.journeyId = task.getJourney().getId();
+        }
         this.userId = task.getUser().getId();
     }
+
+	public Tasks(String name, boolean status, String userId, String journeyId) {
+        this.name = name;
+        this.status = status;
+        this.userId = userId;
+        this.journeyId = journeyId;
+	}
 }

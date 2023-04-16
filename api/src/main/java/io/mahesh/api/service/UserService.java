@@ -10,6 +10,8 @@ import com.mongodb.MongoException;
 import io.mahesh.api.data.entity.UserEntity;
 import io.mahesh.api.data.repository.UserRepository;
 
+import io.mahesh.api.model.Users;
+
 /*
  * Service: User Operations
  */
@@ -18,50 +20,51 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserEntity getUser(UserEntity user) {
-        System.out.println("Service GET *****");
-        return userRepository.findByUsernameAndPassword(user.getUserName(), user.getPassword());
-    }
-    
-    public boolean getUserByUsername(String userName, String password) {
-        boolean username_present;
-        boolean password_present;
+    public Users getUser(Users user) { //TODO
+        String username = user.getUserName();
+        String password = user.getPassword();
         try {
-            username_present = userRepository.findTopByUsername(userName) != null ? true : false;
-            System.out.println("Username present: " + username_present);
-            password_present = userRepository.findTopByPassword(password) != null ? true : false;
-            System.out.println("Password present: " + password_present);
-        } catch(MongoException nre) {
-            return true;
-        }
-        return username_present && password_present;
-    }
-
-    public boolean findUserByUsername(String userName) {
-        boolean username_present;
-        try {
-            username_present = userRepository.findTopByUsername(userName) != null ? true : false;
-            System.out.println("userName present (U): " + username_present);
-        } catch(MongoException nre) {
-            return true;
-        }
-        return username_present;
-    }
-
-    public void registerUser(UserEntity user) {
-        System.out.println("\tIn UserService of saveUser");
-        System.out.println("\t\tCalling userRepository.save()");
-        userRepository.save(user);
-        System.out.println(user);
-    }
-
-    public Optional<UserEntity> findUserById(String _id) {
-        System.out.println("User Service finding user with id: " + _id);
-        try {
-            return userRepository.findById(_id);
+            Optional<UserEntity> uEntity = userRepository.findByUsernameAndPassword(username,password);
+            if (uEntity.isPresent()) {
+                return new Users(uEntity.get());
+            }
         } catch (MongoException e) {
-            System.out.println("Error finding user");
+            // Log Statement
+        }
+        return null;
+    }
+
+    public boolean findUserByUsername(String userName) { 
+        boolean usernamePresent;
+        try {
+            usernamePresent = userRepository.findTopByUsername(userName) != null ? true : false;
+        } catch(MongoException e) {
+            //Log Statement
+            return true;
+        }
+        return usernamePresent;
+    }
+
+    public Users registerUser(Users user) {
+        try {
+            UserEntity uEntity = new UserEntity(user);
+            uEntity = userRepository.save(uEntity);
+            return new Users(uEntity);
+        } catch (MongoException e) {
+            // Log Statement
             return null;
         }
+    }
+
+    public Users findUserById(String id) {
+        try {
+            Optional<UserEntity> uEntity = userRepository.findById(id);
+            if (uEntity.isPresent()) {
+                return new Users(uEntity.get());
+            }
+        } catch (MongoException e) {
+            // Log Statement
+        }
+        return null;
     }
 }

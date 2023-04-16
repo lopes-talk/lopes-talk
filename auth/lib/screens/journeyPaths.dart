@@ -1,8 +1,8 @@
-import 'package:auth/widgets/historyCard.dart';
+import 'package:auth/widgets/journeyList.dart';
 import 'package:flutter/material.dart';
 
-class HistoryScreen extends StatelessWidget {
-  const HistoryScreen({super.key});
+class JourneyPathScreen extends StatelessWidget {
+  const JourneyPathScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class HistoryScreen extends StatelessWidget {
         backgroundColor: const Color.fromRGBO(233, 231, 206, 1),
         appBar: AppBar(
           title: const Text(
-            'History',
+            'Journey Paths',
             style: TextStyle(
               color: Color.fromRGBO(255, 253, 227, 1),
               fontSize: 28,
@@ -20,13 +20,8 @@ class HistoryScreen extends StatelessWidget {
           centerTitle: true,
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            // ignore: prefer_const_literals_to_create_immutables
-            children: [
-              const HistoryCard(day: 'Day ...', body: "completed task"),
-            ],
-          ),
+        body: const SingleChildScrollView(
+          child: JourneyList(),
         ));
   }
 }

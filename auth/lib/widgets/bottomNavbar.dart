@@ -1,13 +1,12 @@
+import 'package:auth/screens/about.dart';
+import 'package:auth/screens/history.dart';
+import 'package:auth/screens/home.dart';
+import 'package:auth/screens/journeyPaths.dart';
+import 'package:auth/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:auth/screens/about.dart';
-import 'package:auth/screens/settings.dart';
-import '../screens/history.dart';
-import '../screens/home.dart';
-import '../screens/journeyPath.dart';
-
-final selectedTabIndexProvider = StateProvider<int>((ref) => 0);
+import '../providers/navProvider.dart';
 
 class BottomNavigation extends ConsumerWidget {
   final List<BottomNavigationBarItem> bottomNavigationItems = [
@@ -43,7 +42,7 @@ class BottomNavigation extends ConsumerWidget {
     const HistoryScreen(),
     const HomeScreen(),
     const AboutScreen(),
-    const Settings(),
+    const SettingsScreen(),
   ];
 
   BottomNavigation({Key? key}) : super(key: key);

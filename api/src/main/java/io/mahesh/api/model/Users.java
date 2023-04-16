@@ -1,7 +1,4 @@
 package io.mahesh.api.model;
-
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import io.mahesh.api.data.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,13 +8,14 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document("Users")
 public class Users {
-    @NonNull
     private String id;
 
     @NonNull
     private String userName;
+
+    @NonNull 
+    private String password;
 
     @NonNull
     private String firstName;
@@ -27,8 +25,6 @@ public class Users {
 
     @NonNull
     private String pronouns;
-
-    private int age;
 
     /**
      * Id-only contructor
@@ -48,6 +44,5 @@ public class Users {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.pronouns = user.getPronouns();
-        this.age = user.getAge();
     }
 }

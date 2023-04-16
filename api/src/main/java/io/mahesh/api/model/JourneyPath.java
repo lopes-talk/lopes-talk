@@ -1,39 +1,47 @@
 package io.mahesh.api.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import io.mahesh.api.data.entity.JourneyPathEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
-@Document("Journey_Path")
+@AllArgsConstructor
+@NoArgsConstructor
 public class JourneyPath {
-    @Id
-    private String _id;
+    private String id;
 
     @NonNull
     private String name;
 
+    private boolean isActive;
+
     @NonNull
-    private String taskId;
+    private String userId;
 
     /**
      * Id-only contructor
      * 
-     * @param _id JourneyPath ID
+     * @param id JourneyPath ID
      */
-    public JourneyPath(String _id) {
-        this._id = _id;
+    public JourneyPath(String id) {
+        this.id = id;
     }
 
     /*
      * Converts JourneyPathEntity obj ==> JourneyPath Model obj
      */
-    public JourneyPath(JourneyPathEntity user) {
-        this._id = user.get_id();
-        this.name = user.getName();
-        this.taskId = user.getTaskId();
+    public JourneyPath(JourneyPathEntity journeyEntity) {
+        this.id = journeyEntity.getId();
+        this.name = journeyEntity.getName();
+        this.isActive = journeyEntity.isActive();
+        this.userId = journeyEntity.getUser().getId();
+    }
+
+    public JourneyPath(String name, boolean isActive, String userId) {
+        this.name = name;
+        this.isActive = isActive;
+        this.userId = userId;
     }
 }

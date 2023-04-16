@@ -5,10 +5,12 @@ class JourneyPathCard extends StatelessWidget {
     Key? key,
     required this.title,
     required this.body,
+    required this.active,
   }) : super(key: key);
 
   final String title;
   final String body;
+  final bool active;
 
   @override
   Widget build(BuildContext context) {
@@ -56,20 +58,23 @@ class JourneyPathCard extends StatelessWidget {
                                 )),
                           ),
                         ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      const Color.fromRGBO(171, 178, 109, 1),
-                                ),
-                                child: const Text(
-                                  'Follow Path',
-                                  style: TextStyle(
-                                      fontSize: 13, color: Colors.black),
-                                )),
+                        Visibility(
+                          visible: !active,
+                          child: Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        const Color.fromRGBO(171, 178, 109, 1),
+                                  ),
+                                  child: const Text(
+                                    'Follow Path',
+                                    style: TextStyle(
+                                        fontSize: 13, color: Colors.black),
+                                  )),
+                            ),
                           ),
                         )
                       ],

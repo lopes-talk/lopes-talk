@@ -1,44 +1,21 @@
-import 'dart:convert';
-
-import 'package:auth/models/user.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/authProvider.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
-
-  @override
-  State<Login> createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
-  final _formKey = GlobalKey<FormState>();
-  User user = User(id: -1, userName: '', email: '', password: '');
-
-  String url = "http://172.24.241.204:8080/login";
-  Future save() async {
-    print('in login');
-    print(json.encode({'userName': user.userName, 'Password': user.password}));
-    print(Uri.parse(url));
-    var res = await http.post(Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: json
-            .encode({'userName': user.userName, 'Password': user.password}));
-
-    print(res.body);
-    if (res.body != null) {
-      Navigator.pop(context);
-    }
-  }
+class LoginScreen extends ConsumerWidget {
+  const LoginScreen({Key? key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextEditingController _userNameController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
+
     return Scaffold(
       backgroundColor: const Color.fromRGBO(233, 231, 206, 1),
-      body: SingleChildScrollView(
-          child: Form(
-        key: _formKey,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Padding(
               padding: EdgeInsets.fromLTRB(8, 25, 8, 8),
@@ -65,104 +42,115 @@ class _LoginState extends State<Login> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  errorStyle: TextStyle(
-                    fontSize: 18,
-                    color: Color.fromRGBO(137, 0, 0, 1),
-                  ),
-                  border: UnderlineInputBorder(),
-                  labelText: 'Username',
+            TextFormField(
+              controller: _userNameController,
+              decoration: const InputDecoration(
+                errorStyle: TextStyle(
+                  fontSize: 18,
+                  color: Color.fromRGBO(137, 0, 0, 1),
                 ),
-                controller: TextEditingController(text: user.userName),
-                onChanged: (val) {
-                  user.userName = val;
-                },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a username!';
-                  }
-                  return null;
-                },
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
+                border: UnderlineInputBorder(),
+                hintText: 'Username',
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  errorStyle: TextStyle(
-                    fontSize: 18,
-                    color: Color.fromRGBO(137, 0, 0, 1),
-                  ),
-                  border: UnderlineInputBorder(),
-                  labelText: 'Password',
-                ),
-                controller: TextEditingController(text: user.password),
-                onChanged: (val) {
-                  user.password = val;
-                },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a password!';
-                  }
-                  return null;
-                },
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, '/register');
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter an userName!';
+                }
+                return null;
               },
-              // onTap: () {
-              //   Navigator.pop(context, '');
-              // },
-              child: const Text(
-                "Don't have an Account?",
-                style: TextStyle(
-                  fontFamily: 'Zeyada',
-                  fontSize: 20,
-                  color: Colors.black,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _passwordController,
+              decoration: const InputDecoration(
+                hintText: 'Password',
+                errorStyle: TextStyle(
+                  fontSize: 18,
+                  color: Color.fromRGBO(137, 0, 0, 1),
                 ),
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter a password!';
+                }
+                return null;
+              },
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+              obscureText: true,
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () {
+                final userName = _userNameController.text;
+                final password = _passwordController.text;
+                ref
+                    .watch(authRepositoryProvider)
+                    .signInWithUserNameAndPassword(userName, password);
+              },
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0.0),
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.all(
+                  const Color.fromRGBO(171, 178, 109, 1),
+                ),
+              ),
+              child: const Text(
+                'Login with User Name and password :)',
+                style: TextStyle(fontSize: 13, color: Colors.black),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () =>
+                  ref.watch(authRepositoryProvider).signInWithGoogle(),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0.0),
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.all(
+                  const Color.fromRGBO(171, 178, 109, 1),
+                ),
+              ),
+              icon: Image.asset(
+                'assets/images/g-logo.png',
+                height: 20,
+              ),
+              label: const Text(
+                'Sign in with Google',
+                style: TextStyle(fontSize: 13, color: Colors.black),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: SizedBox(
-                height: 30,
-                width: 123.28,
-                child: TextButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        save();
-                      }
-                    },
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0.0),
-                        )),
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color.fromRGBO(171, 178, 109, 1))),
-                    child: const Text(
-                      'Login :)',
-                      style: TextStyle(fontSize: 13, color: Colors.black),
-                    )),
+              padding: const EdgeInsets.all(15.0),
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/register');
+                },
+                child: const Text(
+                  "Don't have an Account?",
+                  style: TextStyle(
+                    fontFamily: 'Zeyada',
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                ),
               ),
-            )
+            ),
           ],
         ),
-      )),
+      ),
     );
   }
 }

@@ -1,8 +1,9 @@
 package io.mahesh.api.controller;
 
-import java.util.Optional;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,46 +12,84 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.mahesh.api.data.entity.UserEntity;
+import io.mahesh.api.model.JourneyPath;
+import io.mahesh.api.model.Tasks;
+import io.mahesh.api.model.Users;
+import io.mahesh.api.service.JourneyPathService;
+import io.mahesh.api.service.TaskService;
 import io.mahesh.api.service.UserService;
 
 @RestController
-@RequestMapping("/user/api")
+@RequestMapping("api")
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private JourneyPathService journeyService;
+    @Autowired
+    private TaskService taskService;
 
-    @GetMapping("/login")
-    private UserEntity getCurrentUser(@RequestBody UserEntity user) {
-        System.out.println("GET User by userName and password *****");
-        return userService.getUser(user);
-    }
-
-    @GetMapping("/users/{id}")
-    private ResponseEntity<UserEntity> getUserById(@PathVariable("id") String id) {
-        Optional<UserEntity> userOptional = userService.findUserById(id);
-        if(userOptional.isPresent()) {
-            return ResponseEntity.ok(userOptional.get());
+    @PostMapping("/login")
+    private ResponseEntity<Object> loginUser(@RequestBody Users user) {
+        Users uModel = userService.getUser(user);
+        if (uModel != null) {
+            return ResponseEntity.ok(uModel);
         }
-        return ResponseEntity.notFound().build();
+        String message = "Login failed for user " + user.getUserName();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
     }
 
-    @GetMapping("/login/{userName}&{password}")
-    private boolean findUserByUsername(@PathVariable String userName, @PathVariable String password) {
-        System.out.println("GET User by userName and password *****");
-        return userService.getUserByUsername(userName, password);
-    }
-
-    @PostMapping("/registerUser")
-    private boolean registerUser(@RequestBody UserEntity user) {
-        System.out.println("In UserController of registerUser");
-        boolean user_exits = userService.findUserByUsername(user.getUserName());
-        if (user_exits) {
-            System.out.println("CANT CREATE USER!");
-            return false;
+    @PostMapping("/register")
+    private ResponseEntity<Object> registerUser(@RequestBody Users user) {
+        boolean userExits = userService.findUserByUsername(user.getUserName());
+        if(userExits) {
+            // Log Statement for user already exists
+            return ResponseEntity.ok("Accout already exists with username");
         }
-        System.out.println("\tCalling userService.saveUser()");
-        userService.registerUser(user);
-        return true;
+        Users uModel = userService.registerUser(user);
+        autoGeneratePaths(uModel);
+        return ResponseEntity.ok(uModel);
+    }
+
+    @GetMapping("/user/{id}")
+    private ResponseEntity<Object> getUserById(@PathVariable("id") String id) {
+        Users uModel = userService.findUserById(id);
+        if (uModel != null) {
+            return ResponseEntity.ok(uModel);
+        }
+        String message = "User with ID " + id + " not found";
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+    }
+
+    /**
+     * Helper Method to autogenerate the journeys and tasks for a user
+     * @param user
+     */
+    public void autoGeneratePaths(Users user) {
+        ArrayList<String> setJourneyPaths = new ArrayList<String>() {{
+            add("Physical");
+            add("Emotional");
+            add("Practical");
+            add("Mental");
+            add("Social");
+        }};
+        for (String journeyString : setJourneyPaths ) {
+            // Create a journey for user
+            String jName = journeyString;
+            boolean isActive = false;
+            String userId = user.getId();
+            JourneyPath jModel = new JourneyPath(jName, isActive, userId);
+
+            jModel = journeyService.createJourneyPath(jModel);
+
+            // Create the 4 tasks for each journey 
+            for (int t = 0; t < 6; t++) {
+                //Create tasks for users that belong to the created journey
+                String tName = "Task " + t;
+                boolean status = false;
+                Tasks tModel = new Tasks(tName, status, userId, jModel.getId());
+                taskService.createTask(tModel);
+            }
+        }
     }
 }

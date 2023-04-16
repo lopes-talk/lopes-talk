@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
+
 import io.mahesh.api.model.Tasks;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,8 +25,8 @@ public class TasksEntity {
     @Id
     private String id;
 
-    @NonNull
-    private String pathId;
+    @DBRef
+    private JourneyPathEntity journey;
 
     @NonNull
     private String name;
@@ -44,8 +45,10 @@ public class TasksEntity {
      */
     public TasksEntity(Tasks task) {
         this.id = task.getId();
-        this.pathId = task.getPathId();
+        this.name = task.getName();
+        this.journey = new JourneyPathEntity(task.getJourneyId());
         this.status = task.isStatus();
         this.dateCompleted = task.getDateCompleted();
+        this.user = new UserEntity(task.getUserId());
     }
 }

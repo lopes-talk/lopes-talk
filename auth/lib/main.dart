@@ -1,19 +1,16 @@
-import 'package:auth/screens/about.dart';
-import 'package:auth/screens/addTask.dart';
-import 'package:auth/screens/editTask.dart';
-import 'package:auth/screens/history.dart';
-import 'package:auth/screens/journeyPath.dart';
-import 'package:auth/screens/login.dart';
-import 'package:auth/screens/register.dart';
-import 'package:auth/screens/seeMoreEmotional.dart';
-import 'package:auth/screens/seeMoreMental.dart';
-import 'package:auth/screens/seeMorePhysical.dart';
-import 'package:auth/screens/seeMorePractical.dart';
-import 'package:auth/screens/seeMoreSocial.dart';
-import 'package:auth/screens/settings.dart';
-import 'package:auth/widgets/bottomNavbar.dart';
+import 'package:auth/providers/userProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'screens/about.dart';
+import 'screens/addTask.dart';
+import 'screens/editTask.dart';
+import 'screens/history.dart';
+import 'screens/journeyPaths.dart';
+import 'screens/journeyTasks.dart';
+import 'screens/login.dart';
+import 'screens/register.dart';
+import 'screens/settings.dart';
+import 'widgets/bottomNavbar.dart';
 
 void main() {
   runApp(
@@ -36,27 +33,35 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         hoverColor: Colors.transparent,
-
-        //  default font family
-        //fontFamily: 'sweet purple'
       ),
-      initialRoute: '/login',
+      home: const AuthWrapper(),
       routes: {
-        '/': (context) => BottomNavigation(),
-        '/login': (context) => const Login(),
-        '/register': (context) => const Register(),
+        //'/': (context) => BottomNavigation(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => RegistrationScreen(),
         '/about': (context) => const AboutScreen(),
         '/history': (context) => const HistoryScreen(),
-        '/settings': (context) => const Settings(),
+        '/settings': (context) => const SettingsScreen(),
         '/addTask': (context) => const AddTaskScreen(),
         '/editTask': (context) => const EditTaskScreen(),
         '/journeyPaths': (context) => const JourneyPathScreen(),
-        '/journeyEmotional': (context) => const SeeMoreEmotionalScreen(),
-        '/journeyMental': (context) => const SeeMoreMentalScreen(),
-        '/journeyPhysical': (context) => const SeeMorePhysicalScreen(),
-        '/journeyPractical': (context) => const SeeMorePracticalScreen(),
-        '/journeySocial': (context) => const SeeMoreSocialScreen(),
+        '/journeyTasks': (context) => const JourneyTasksScreen(),
       },
     );
+  }
+}
+
+class AuthWrapper extends ConsumerWidget {
+  const AuthWrapper();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
+
+    if (user != null) {
+      return BottomNavigation();
+    } else {
+      return const LoginScreen();
+    }
   }
 }

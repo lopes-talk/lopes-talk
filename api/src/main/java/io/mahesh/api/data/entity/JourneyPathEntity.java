@@ -1,6 +1,6 @@
 package io.mahesh.api.data.entity;
 
-import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.mongodb.lang.NonNull;
@@ -18,21 +18,33 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Document("Journey_Path")
 public class JourneyPathEntity {
-    @Id
-    private String _id;
+    private String id;
 
     @NonNull
     private String name;
 
-    @NonNull
-    private String taskId;
+    @NonNull 
+    private boolean isActive;
+
+    @DBRef
+    private UserEntity user;
+
+    /**
+     * Id-only contructor
+     * 
+     * @param id JourneyPath ID
+     */
+    public JourneyPathEntity(String id) {
+        this.id = id;
+    }
 
     /*
      * Converts JourneyPath Model ==> JourneyPathEntity
      */
-    public JourneyPathEntity(JourneyPath user) {
-        this._id = user.get_id();
-        this.name = user.getName();
-        this.taskId = user.getTaskId();
+    public JourneyPathEntity(JourneyPath journey) {
+        this.id = journey.getId();
+        this.name = journey.getName();
+        this.isActive = journey.isActive();
+        this.user = new UserEntity(journey.getUserId());
     }
 }

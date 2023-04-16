@@ -1,295 +1,216 @@
-import 'dart:convert';
-
 import 'package:auth/models/user.dart';
+import 'package:auth/providers/authProvider.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-import 'login.dart';
+import '../services/authService.dart';
 
-class Register extends StatefulWidget {
-  const Register({super.key});
+class PronounsNotifier extends StateNotifier<String> {
+  PronounsNotifier() : super('she/her');
 
-  @override
-  State<Register> createState() => _RegisterState();
+  void changePronoun(String newPronoun) {
+    state = newPronoun;
+  }
 }
 
-class _RegisterState extends State<Register> {
-  final dateController = TextEditingController();
-  //  radioButtons call(none will be selected)
-  String? pronouns;
+final pronounsNotifierProvider =
+    StateNotifierProvider<PronounsNotifier, String>((ref) {
+  return PronounsNotifier();
+});
 
-  final _formKey = GlobalKey<FormState>();
-  User user = User(id: -1, userName: '', email: '', password: '');
-
-  String url = "http://172.24.241.204:8080/register";
-  Future save() async {
-    print('in register');
-    print(json.encode({'userName': user.userName, 'password': user.password}));
-    print(Uri.parse(url));
-    var res = await http.post(Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: json
-            .encode({'userName': user.userName, 'Password': user.password}));
-
-    print(res.body);
-  }
-
+class RegistrationScreen extends ConsumerWidget {
   @override
-  void dispose() {
-    //  clean controller when widget is removed
-    dateController.dispose();
-    super.dispose();
-  }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _formKey = GlobalKey<FormState>();
+    final TextEditingController _usernameController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
+    final TextEditingController _firstNameController = TextEditingController();
+    final TextEditingController _lastNameController = TextEditingController();
+    final List<String> _pronouns = ['she/her', 'he/him', 'they/them', 'other'];
+    final String _selectedPronoun = ref.watch(pronounsNotifierProvider);
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(233, 231, 206, 1),
-      body: SingleChildScrollView(
-          child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(8, 25, 8, 8),
-              //padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Register',
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Zeyada',
-                  color: Color.fromRGBO(138, 104, 34, 1),
-                ),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Create an Account!',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Zeyada',
-                  color: Color.fromRGBO(138, 104, 34, 1),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  errorStyle: TextStyle(
-                    fontSize: 18,
-                    color: Color.fromRGBO(137, 0, 0, 1),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: <Widget>[
+              Column(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(8, 25, 8, 8),
+                    //padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Register',
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Zeyada',
+                        color: Color.fromRGBO(138, 104, 34, 1),
+                      ),
+                    ),
                   ),
-                  border: UnderlineInputBorder(),
-                  labelText: 'First Name',
-                ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Create an Account!',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Zeyada',
+                        color: Color.fromRGBO(138, 104, 34, 1),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              TextFormField(
+                controller: _usernameController,
+                decoration: const InputDecoration(labelText: 'Username'),
                 validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your first name!';
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a username';
                   }
                   return null;
                 },
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  errorStyle: TextStyle(
-                    fontSize: 18,
-                    color: Color.fromRGBO(137, 0, 0, 1),
-                  ),
-                  border: UnderlineInputBorder(),
-                  labelText: 'Last Name',
-                ),
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
                 validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your last name!';
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a password';
                   }
                   return null;
                 },
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  errorStyle: TextStyle(
-                    fontSize: 18,
-                    color: Color.fromRGBO(137, 0, 0, 1),
-                  ),
-                  border: UnderlineInputBorder(),
-                  labelText: 'Username',
-                ),
-                controller: TextEditingController(text: user.userName),
-                onChanged: (val) {
-                  user.userName = val;
-                },
+              TextFormField(
+                controller: _firstNameController,
+                decoration: const InputDecoration(labelText: 'First Name'),
                 validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a username!';
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your first name';
                   }
                   return null;
                 },
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  errorStyle: TextStyle(
-                    fontSize: 18,
-                    color: Color.fromRGBO(137, 0, 0, 1),
-                  ),
-                  border: UnderlineInputBorder(),
-                  labelText: 'Password',
-                ),
-                controller: TextEditingController(text: user.password),
-                onChanged: (val) {
-                  user.password = val;
-                },
+              TextFormField(
+                controller: _lastNameController,
+                decoration: const InputDecoration(labelText: 'Last Name'),
                 validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a password!';
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your last name';
                   }
                   return null;
                 },
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
               ),
-            ),
-            Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  child: Text(
-                    "Pronouns",
-                    style: TextStyle(fontSize: 20),
+              SizedBox(height: 16),
+              Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    child: Text(
+                      "Pronouns",
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: RadioListTile(
+                  for (String pronoun in _pronouns)
+                    ListTile(
                       tileColor: const Color.fromRGBO(215, 215, 175, .75),
-                      title: const Text('she/her'),
-                      value: 'she/her',
-                      groupValue: pronouns,
-                      onChanged: (value) {
-                        setState(() {
-                          pronouns = value.toString();
-                        });
-                      }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: RadioListTile(
-                      tileColor: const Color.fromRGBO(215, 215, 175, .75),
-                      title: const Text('he/him'),
-                      value: 'he/him',
-                      groupValue: pronouns,
-                      onChanged: (value) {
-                        setState(() {
-                          pronouns = value.toString();
-                        });
-                      }),
-                ),
-                // Container(
-                //   padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                //   child: RadioTheme(),
-                // ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: RadioListTile(
-                      tileColor: const Color.fromRGBO(215, 215, 175, .75),
-                      title: const Text('they/them'),
-                      value: 'they/them',
-                      groupValue: pronouns,
-                      onChanged: (value) {
-                        setState(() {
-                          pronouns = value.toString();
-                        });
-                      }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: RadioListTile(
-                      tileColor: const Color.fromRGBO(215, 215, 175, .75),
-                      title: const Text('Other'),
-                      value: '',
-                      groupValue: pronouns,
-                      onChanged: (value) {
-                        setState(() {
-                          pronouns = value.toString();
-                        });
-                      }),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Login()));
-                },
-                child: const Text(
-                  "Already have an Account?",
-                  style: TextStyle(
-                    fontFamily: 'Zeyada',
-                    fontSize: 20,
-                    color: Colors.black,
+                      title: Text(pronoun),
+                      leading: Radio<String>(
+                        value: pronoun,
+                        groupValue: _selectedPronoun,
+                        onChanged: (String? value) {
+                          if (value != null) {
+                            ref
+                                .read(pronounsNotifierProvider.notifier)
+                                .changePronoun(value);
+                          }
+                        },
+                      ),
+                    ),
+                  SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/login');
+                      },
+                      child: const Text(
+                        "Already have an Account?",
+                        style: TextStyle(
+                          fontFamily: 'Zeyada',
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 16, 16),
-                child: SizedBox(
-                  height: 33,
-                  width: 125,
-                  child: TextButton(
-                      onPressed: () {
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 16, 16),
+                  child: SizedBox(
+                    height: 33,
+                    width: 125,
+                    child: ElevatedButton(
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          save();
+                          // Attempt to register the user
+                          final authService = ref.watch(authRepositoryProvider);
+                          final user =
+                              await authService.registerWithUserNameAndPassword(
+                            User(
+                              id: '',
+                              userName: _usernameController.text,
+                              firstName: _firstNameController.text,
+                              lastName: _lastNameController.text,
+                              pronouns: _selectedPronoun,
+                              password: _passwordController.text,
+                            ),
+                          );
+
+                          if (user != null) {
+                            // Registration successful
+                            Navigator.pop(context);
+                          } else {
+                            // Registration failed
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Registration failed')),
+                            );
+                          }
                         }
                       },
                       style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0.0),
-                          )),
-                          backgroundColor: MaterialStateProperty.all(
-                              const Color.fromRGBO(171, 178, 109, 1))),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0.0),
+                        )),
+                        backgroundColor: MaterialStateProperty.all(
+                          const Color.fromRGBO(171, 178, 109, 1),
+                        ),
+                      ),
                       child: const Text(
                         'Register :D',
                         style: TextStyle(fontSize: 15, color: Colors.black),
-                      )),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }

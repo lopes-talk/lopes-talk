@@ -14,7 +14,7 @@ import io.mahesh.api.data.entity.UserEntity;
 @Repository
 public interface UserRepository extends MongoRepository<UserEntity, String> {
     @Query("{userName:'?0', password:'?1'}")  
-    UserEntity findByUsernameAndPassword(String userName, String password);
+    Optional<UserEntity> findByUsernameAndPassword(String userName, String password);
 
     @Query("{userName:'?0'}")  
     UserEntity findTopByUsername(String userName);
@@ -22,5 +22,5 @@ public interface UserRepository extends MongoRepository<UserEntity, String> {
     @Query("{password:'?0'}")  
     UserEntity findTopByPassword(String password);
 
-    Optional<UserEntity> findById(String _id);
+    Optional<UserEntity> findById(String id);
 }
