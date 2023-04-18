@@ -1,10 +1,11 @@
 package io.mahesh.api.model;
 
 import io.mahesh.api.data.entity.JourneyPathEntity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Data
 @AllArgsConstructor
@@ -12,12 +13,14 @@ import lombok.NonNull;
 public class JourneyPath {
     private String id;
 
-    @NonNull
+    @NotNull
+    @NotBlank
     private String name;
 
     private boolean isActive;
 
-    @NonNull
+    @NotBlank
+    @NotNull
     private String userId;
 
     /**

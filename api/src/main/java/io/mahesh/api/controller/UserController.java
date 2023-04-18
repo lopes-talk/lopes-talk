@@ -2,9 +2,12 @@ package io.mahesh.api.controller;
 
 import java.util.ArrayList;
 
+import javax.naming.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,15 +15,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.mahesh.api.service.JourneyPathService;
+import io.mahesh.api.response.ReponseObject;
+import io.mahesh.api.service.TaskService;
+import io.mahesh.api.service.UserService;
 import io.mahesh.api.model.JourneyPath;
 import io.mahesh.api.model.Tasks;
 import io.mahesh.api.model.Users;
-import io.mahesh.api.service.JourneyPathService;
-import io.mahesh.api.service.TaskService;
-import io.mahesh.api.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api")
+@CrossOrigin(origins = {"http://localhost:8080", "https://your-api-domain.com"})
 public class UserController {
     @Autowired
     private UserService userService;
@@ -29,36 +36,27 @@ public class UserController {
     @Autowired
     private TaskService taskService;
 
+    // TODO  - Separate into credentials mdoel
     @PostMapping("/login")
-    private ResponseEntity<Object> loginUser(@RequestBody Users user) {
-        Users uModel = userService.getUser(user);
-        if (uModel != null) {
-            return ResponseEntity.ok(uModel);
-        }
-        String message = "Login failed for user " + user.getUserName();
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
-    }
+    private ResponseEntity<ReponseObject<Object>> loginUser(@RequestBody Users user) throws AuthenticationException {
+        Users uModel;
+        uModel = userService.getUser(user);
+        return ResponseEntity.status(HttpStatus.OK).body(new ReponseObject<>("Success", HttpStatus.OK.value(), "User logged in successfully", uModel));   
+     }
 
+    // TODO  - Separate into credentials mdoel
     @PostMapping("/register")
-    private ResponseEntity<Object> registerUser(@RequestBody Users user) {
-        boolean userExits = userService.findUserByUsername(user.getUserName());
-        if(userExits) {
-            // Log Statement for user already exists
-            return ResponseEntity.ok("Accout already exists with username");
-        }
+    private ResponseEntity<ReponseObject<Object>> registerUser(@Valid @RequestBody Users user) {
         Users uModel = userService.registerUser(user);
         autoGeneratePaths(uModel);
-        return ResponseEntity.ok(uModel);
+        return ResponseEntity.status(HttpStatus.OK).body(new ReponseObject<>("Success", HttpStatus.OK.value(), "User registered successfully", uModel));   
+
     }
 
     @GetMapping("/user/{id}")
-    private ResponseEntity<Object> getUserById(@PathVariable("id") String id) {
+    private ResponseEntity<ReponseObject<Object>> getUserById(@PathVariable("id") String id) {
         Users uModel = userService.findUserById(id);
-        if (uModel != null) {
-            return ResponseEntity.ok(uModel);
-        }
-        String message = "User with ID " + id + " not found";
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+        return ResponseEntity.status(HttpStatus.OK).body(new ReponseObject<>("Success", HttpStatus.OK.value(), "User retrieved sucessfully", uModel)); 
     }
 
     /**

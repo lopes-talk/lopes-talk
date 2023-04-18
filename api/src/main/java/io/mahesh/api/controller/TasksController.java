@@ -1,11 +1,9 @@
 package io.mahesh.api.controller;
 
-import java.util.ArrayList;
-import java.util.Objects;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,75 +13,55 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+
+import jakarta.validation.Valid;
 import io.mahesh.api.model.JourneyPath;
 import io.mahesh.api.model.Tasks;
 import io.mahesh.api.model.Users;
+import io.mahesh.api.response.ReponseObject;
 import io.mahesh.api.service.TaskService;
-
 
 @RestController
 @RequestMapping("api")
+@CrossOrigin(origins = {"http://localhost:8080", "https://your-api-domain.com"})
 public class TasksController {
     @Autowired
     private TaskService taskService;
 
     @GetMapping("/task/{id}") 
-    private ResponseEntity<Object> getTaskById(@PathVariable("id") String id) {
+    private ResponseEntity<ReponseObject<Object>> getTaskById(@PathVariable("id") String id) {
        Tasks tModel = taskService.findTaskById(id);
-        if(tModel != null) {
-            return ResponseEntity.ok(tModel);
-        }
-        String message = "Task with ID " + id + " not found";
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+       return ResponseEntity.status(HttpStatus.OK).body(new ReponseObject<>("Success", HttpStatus.OK.value(), "Task retrieved successfully", tModel));
     }
     
     @PostMapping("/task")
-    private ResponseEntity<Object> createTask(@RequestBody Tasks task) {
+    private ResponseEntity<ReponseObject<Object>> createTask(@Valid @RequestBody Tasks task) {
         Tasks taskModel = taskService.createTask(task);
-        if(!Objects.isNull(taskModel)) {
-            return ResponseEntity.ok(taskModel);
-        }
-        String message = "Error creating task";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ReponseObject<>("Success", HttpStatus.CREATED.value(), "Created task successfully", taskModel));   
     }
 
     @PostMapping("/task/user")
-    private ResponseEntity<Object> getTasksByUser(@RequestBody Users user) {
+    private ResponseEntity<ReponseObject<Object>> getTasksByUser(@RequestBody Users user) {
         ArrayList<Tasks> tasks = taskService.findTasksByUser(user);
-        if(!tasks.isEmpty()) {
-            return ResponseEntity.ok(tasks);
-        }
-        String message = "Tasks for user  " + user.getId()+ " not found";
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+        return ResponseEntity.status(HttpStatus.OK).body(new ReponseObject<>("Success", HttpStatus.OK.value(), "Tasks retrieved successfully", tasks));
     }
 
     @PostMapping("/task/journey")
-    private ResponseEntity<Object> getTaskByJourney(@RequestBody JourneyPath journey) {
+    private ResponseEntity<ReponseObject<Object>> getTaskByJourney(@RequestBody JourneyPath journey) {
         ArrayList<Tasks> tasks = taskService.findTasksByJourney(journey);
-        if(!tasks.isEmpty()) {
-            return ResponseEntity.ok(tasks);
-        }
-        String message = "Tasks for journey  " + journey.getId()+ " not found";
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+        return ResponseEntity.status(HttpStatus.OK).body(new ReponseObject<>("Success", HttpStatus.OK.value(), "Tasks retrieved successfully", tasks));
     }
 
     @PutMapping("/task")
-    private ResponseEntity<Object> updateTask(@RequestBody Tasks task) {
+    private ResponseEntity<ReponseObject<Object>> updateTask(@Valid @RequestBody Tasks task) {
         Tasks taskModel = taskService.updateTask(task);
-        if(taskModel != null) {
-            return ResponseEntity.ok(taskModel);
-        }
-        String message = "Error updating task " + task.getId();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        return ResponseEntity.status(HttpStatus.OK).body(new ReponseObject<>("Success", HttpStatus.OK.value(), "Task updated successfully", taskModel));
     }
 
     @DeleteMapping("/task")
-    private ResponseEntity<String> deleteTask(@RequestBody Tasks task) {
-        boolean deleted = taskService.deleteTask(task);
-        if(deleted) {
-            return ResponseEntity.ok("Successfullly deleted task with id: " + task.getId());
-        }
-        String message = "Error deleting task " + task.getId();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+    private ResponseEntity<ReponseObject<Object>> deleteTask(@Valid @RequestBody Tasks task) {
+        taskService.deleteTask(task);
+        return ResponseEntity.status(HttpStatus.OK).body(new ReponseObject<> ("Success", HttpStatus.OK.value(), "Task deleted successfully", null));
     }
 }

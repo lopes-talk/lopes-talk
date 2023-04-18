@@ -1,9 +1,11 @@
 package io.mahesh.api.model;
+
 import io.mahesh.api.data.entity.UserEntity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Data
 @AllArgsConstructor
@@ -11,19 +13,24 @@ import lombok.NonNull;
 public class Users {
     private String id;
 
-    @NonNull
+    @NotNull
+    @NotBlank
     private String userName;
 
-    @NonNull 
+    @NotNull
+    @NotBlank
     private String password;
 
-    @NonNull
+    @NotNull
+    @NotBlank
     private String firstName;
     
-    @NonNull
+    @NotNull
+    @NotBlank
     private String lastName;
 
-    @NonNull
+    @NotNull
+    @NotBlank
     private String pronouns;
 
     /**

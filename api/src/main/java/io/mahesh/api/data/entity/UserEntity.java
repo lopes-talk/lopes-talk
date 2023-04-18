@@ -1,6 +1,7 @@
 package io.mahesh.api.data.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import io.mahesh.api.model.Users;

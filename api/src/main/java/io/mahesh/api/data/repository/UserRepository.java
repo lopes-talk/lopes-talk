@@ -17,10 +17,10 @@ public interface UserRepository extends MongoRepository<UserEntity, String> {
     Optional<UserEntity> findByUsernameAndPassword(String userName, String password);
 
     @Query("{userName:'?0'}")  
-    UserEntity findTopByUsername(String userName);
+    Optional<UserEntity> findTopByUsername(String userName);
 
     @Query("{password:'?0'}")  
-    UserEntity findTopByPassword(String password);
+    Optional<UserEntity> findTopByPassword(String password);
 
     Optional<UserEntity> findById(String id);
 }

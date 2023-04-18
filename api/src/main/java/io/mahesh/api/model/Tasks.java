@@ -5,10 +5,11 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import io.mahesh.api.data.entity.TasksEntity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +17,8 @@ import lombok.NonNull;
 public class Tasks {
     private String id;
 
-    @NonNull
+    @NotNull
+    @NotBlank
     private String name;
 
     private boolean status;
@@ -24,10 +26,12 @@ public class Tasks {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date dateCompleted;
 
-    @NonNull
+    @NotBlank
+    @NotNull
     private String userId;
     
-    @NonNull
+    @NotBlank
+    @NotNull
     private String journeyId;
 
     /**
