@@ -154,10 +154,12 @@ A few challenges when writing the app was the following:
 - Investing to be able to publish on the Google Play Store
 - Implementing an external API for Quotes
 
+A few risks when writing the app was the following:
+- Before I could get LopesTalk up and running one risk was the idea of using Flutter. If it wasn't a good fit I was going to need to switch to another application such as Android Studio. 
+- One risk of building LopesTalk was the the mascot. I wanted to give the users a virtual friend but drawing wise I struggle. I was able to buy some art from a friend to give users Lopey!
+- Another risk was the idea of implementing an external API. This would save me time instead of having to fully create an API by scratch for motivational quotes.
 
-One risk of building LopesTalk was the the mascot. I wanted to give the users a virtual friend but drawing wise I struggle. I was able to buy some art from a friend to give users Lopey!
-
-One of the main challenges of building LopesTalk is creating engaging and effective self-care activities and resources that resonate with students. To address this challenge, we work closely with mental health
+One of the main challenges in developing LopesTalk is creating engaging and effective self-care resources that resonate with students. To tackle this, I researched various self-care routes and gathered relevant examples. Providing users with a clear understanding of each path with tasks.
 ---
 ## Contacts
 
