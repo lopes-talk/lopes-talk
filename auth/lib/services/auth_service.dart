@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:lopes_talk/providers/user_provider.dart';
 import 'dart:convert';
 import '../models/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -21,17 +21,18 @@ class AuthService {
       final user = await _googleSignIn.signIn();
       if (user != null) {
         final response = await http.post(
-          Uri.parse('https://example.com/authenticate-with-google'),
+          Uri.parse('$baseUrl/login'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
             'userName': user.email,
-            'password': user.id,
+            'password': user.email + user.id,
           }),
         );
+        var responseData = json.decode(response.body);
 
         if (response.statusCode == 200) {
           // Authentication was successful
-          final userData = json.decode(response.body);
+          final userData = responseData['data'];
           final user = User(
             id: userData['id'],
             userName: userData['userName'],
@@ -53,7 +54,58 @@ class AuthService {
     return null;
   }
 
-  Future<User?> signInWithUserNameAndPassword(
+  Future<String> registerWithGoogle() async {
+    try {
+      final user = await _googleSignIn.signIn();
+      if (user != null) {
+        final response = await http.post(
+          Uri.parse('$baseUrl/register'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'userName': user.email,
+            'firstName': user.email,
+            'lastName': user.email,
+            'pronouns': 'OTHER',
+            'password': user.email + user.id,
+          }),
+        );
+
+        var responseData = json.decode(response.body);
+
+        if (response.statusCode == 200) {
+          // Registration was successful
+
+          final userData = responseData['data'];
+          final newUser = User(
+            id: userData['id'],
+            userName: userData['userName'],
+            firstName: userData['firstName'],
+            lastName: userData['lastName'],
+            pronouns: userData['pronouns'],
+          );
+
+          _userNotifier.setUser(newUser);
+          return '';
+        } else if (response.statusCode == 409) {
+          // If a user already exists - 409
+          return responseData['message'];
+        } else if (response.statusCode == 401) {
+          // If validation errors occur cause of input invalid - 400
+          return responseData['message'];
+        } else if (response.statusCode == 400) {
+          // Registration failed
+          List<dynamic> errors = responseData['errors'];
+          return errors.join('\n');
+        }
+      }
+    } catch (e) {
+      // Register Failure Generic (500)
+      return 'Error during registration: $e';
+    }
+    return '';
+  }
+
+  Future<String> signInWithUserNameAndPassword(
       String username, String password) async {
     try {
       final String apiUrl = '$baseUrl/login';
@@ -68,7 +120,8 @@ class AuthService {
 
       if (response.statusCode == 200) {
         // Authentication was successful
-        final userData = json.decode(response.body);
+        var responseData = json.decode(response.body);
+        final userData = responseData['data'];
         final user = User(
           id: userData['id'],
           userName: userData['userName'],
@@ -76,22 +129,23 @@ class AuthService {
           lastName: userData['lastName'],
           pronouns: userData['pronouns'],
         );
-        print(user);
         _userNotifier.setUser(user);
+        return '';
       } else {
         // Authentication failed
         print('Authentication failed with status code ${response.statusCode}');
         print('Response body: ${response.body}');
+        return 'Login failed. Please check your credentials and try again.'; // Return an error message
       }
     } catch (e, stackTrace) {
       // Handle errors here
       print('Error during authentication: $e');
       print('Stack trace:\n$stackTrace');
+      return 'An error occurred during login. Please try again later.'; // Return an error message
     }
-    return null;
   }
 
-  Future<User?> registerWithUserNameAndPassword(User user) async {
+  Future<String> registerWithUserNameAndPassword(User user) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/register'),
@@ -104,11 +158,13 @@ class AuthService {
           'password': user.password,
         }),
       );
+      var responseData = json.decode(response.body);
 
       if (response.statusCode == 200) {
         // Registration was successful
-        final userData = json.decode(response.body);
-        final user = User(
+
+        final userData = responseData['data'];
+        final newUser = User(
           id: userData['id'],
           userName: userData['userName'],
           firstName: userData['firstName'],
@@ -116,15 +172,23 @@ class AuthService {
           pronouns: userData['pronouns'],
         );
 
-        _userNotifier.setUser(user);
-      } else {
+        _userNotifier.setUser(newUser);
+        return '';
+      } else if (response.statusCode == 409) {
+        // If a user already exists - 409
+        return responseData['message'];
+      } else if (response.statusCode == 401) {
+        // If validation errors occur cause of input invalid - 400
+        return responseData['message'];
+      } else if (response.statusCode == 400) {
         // Registration failed
-        print('Registration failed with status code ${response.statusCode}');
+        List<dynamic> errors = responseData['errors'];
+        return errors.join('\n');
       }
     } catch (e) {
-      // Handle errors here
-      print('Error during registration: $e');
+      // Register Failure Generic (500)
+      return 'Error during registration: $e';
     }
-    return null;
+    return '';
   }
 }

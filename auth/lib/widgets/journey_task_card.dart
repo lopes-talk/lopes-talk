@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lopes_talk/models/journey.dart';
+import 'package:lopes_talk/models/task.dart';
+import 'package:lopes_talk/providers/api_service_provider.dart';
+import 'package:lopes_talk/providers/task_provider.dart';
+import 'package:lopes_talk/screens/edit_task_screen.dart';
 
-class JourneyTasksCard extends StatelessWidget {
-  const JourneyTasksCard({
-    Key? key,
-    required this.title,
-    required this.body,
-  }) : super(key: key);
+class JourneyTasksCard extends ConsumerWidget {
+  const JourneyTasksCard({Key? key, required this.task, required this.journey})
+      : super(key: key);
 
-  final String title;
-  final String body;
+  final Task task;
+  final Journey journey;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -26,7 +29,7 @@ class JourneyTasksCard extends StatelessWidget {
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      title,
+                      task.name,
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
@@ -43,7 +46,15 @@ class JourneyTasksCard extends StatelessWidget {
                           padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                           child: ElevatedButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, '/editTask');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditTaskScreen(
+                                      task: task,
+                                      journey: journey,
+                                    ),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor:
@@ -58,16 +69,26 @@ class JourneyTasksCard extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      const Color.fromRGBO(171, 178, 109, 1),
-                                  minimumSize: const Size(100, 29)),
-                              child: const Text(
-                                'Delete',
-                                style: TextStyle(
-                                    fontSize: 13, color: Colors.black),
-                              )),
+                            onPressed: () async {
+                              final apiService = ref.read(apiServiceProvider);
+                              final deleted = await apiService.deleteTask(task);
+
+                              if (deleted) {
+                                // Refresh task lists
+                                ref.refresh(taskListProvider(journey));
+                                ref.refresh(activeTaskListProvider);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    const Color.fromRGBO(171, 178, 109, 1),
+                                minimumSize: const Size(100, 29)),
+                            child: const Text(
+                              'Delete',
+                              style:
+                                  TextStyle(fontSize: 13, color: Colors.black),
+                            ),
+                          ),
                         ),
                       ],
                     ),

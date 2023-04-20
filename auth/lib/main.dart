@@ -1,16 +1,13 @@
-import 'package:auth/providers/userProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'screens/about.dart';
-import 'screens/addTask.dart';
-import 'screens/editTask.dart';
-import 'screens/history.dart';
-import 'screens/journeyPaths.dart';
-import 'screens/journeyTasks.dart';
-import 'screens/login.dart';
-import 'screens/register.dart';
-import 'screens/settings.dart';
-import 'widgets/bottomNavbar.dart';
+import 'package:lopes_talk/providers/user_provider.dart';
+import '../screens/about_screen.dart';
+import '../screens/history_screen.dart';
+import '../screens/journey_paths_screen.dart';
+import '../screens/login_screen.dart';
+import '../screens/register_screen.dart';
+import '../screens/settings_screen.dart';
+import '../widgets/bottom_navbar.dart';
 
 void main() {
   runApp(
@@ -36,23 +33,19 @@ class MyApp extends StatelessWidget {
       ),
       home: const AuthWrapper(),
       routes: {
-        //'/': (context) => BottomNavigation(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => RegistrationScreen(),
         '/about': (context) => const AboutScreen(),
         '/history': (context) => const HistoryScreen(),
-        '/settings': (context) => const SettingsScreen(),
-        '/addTask': (context) => const AddTaskScreen(),
-        '/editTask': (context) => const EditTaskScreen(),
+        '/settings': (context) => SettingsScreen(),
         '/journeyPaths': (context) => const JourneyPathScreen(),
-        '/journeyTasks': (context) => const JourneyTasksScreen(),
       },
     );
   }
 }
 
 class AuthWrapper extends ConsumerWidget {
-  const AuthWrapper();
+  const AuthWrapper({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

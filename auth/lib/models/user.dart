@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lopes_talk/providers/user_provider.dart';
 
 class User {
   final String id;
@@ -36,17 +39,5 @@ class User {
       'lastName': lastName,
       'pronouns': pronouns,
     };
-  }
-}
-
-class UserNotifier extends StateNotifier<User?> {
-  UserNotifier() : super(null);
-
-  void setUser(User user) {
-    state = user;
-  }
-
-  User? getUser() {
-    return state;
   }
 }

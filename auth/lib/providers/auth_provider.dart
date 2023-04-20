@@ -1,12 +1,13 @@
-import 'package:auth/providers/userProvider.dart';
-import 'package:auth/services/authService.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lopes_talk/providers/user_provider.dart';
+import 'package:lopes_talk/services/auth_service.dart';
 
 final authRepositoryProvider = Provider(
   (ref) => AuthService(
     userNotifier: ref.watch(userProvider.notifier),
-    baseUrl: 'http://localhost:3001/api',
+    baseUrl:
+        'http://lopestalk-backend-app-env.us-west-1.elasticbeanstalk.com/api',
     googleSignIn: GoogleSignIn(
       // The OAuth client id of your app. This is required.
       clientId:

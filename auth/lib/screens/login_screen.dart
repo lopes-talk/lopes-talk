@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/authProvider.dart';
+import 'package:lopes_talk/providers/user_provider.dart';
+import '../providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerWidget {
-  const LoginScreen({Key? key});
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController _userNameController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
+    final TextEditingController userNameController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(233, 231, 206, 1),
@@ -43,7 +44,7 @@ class LoginScreen extends ConsumerWidget {
               ),
             ),
             TextFormField(
-              controller: _userNameController,
+              controller: userNameController,
               decoration: const InputDecoration(
                 errorStyle: TextStyle(
                   fontSize: 18,
@@ -65,7 +66,7 @@ class LoginScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             TextFormField(
-              controller: _passwordController,
+              controller: passwordController,
               decoration: const InputDecoration(
                 hintText: 'Password',
                 errorStyle: TextStyle(
@@ -87,12 +88,20 @@ class LoginScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             TextButton(
-              onPressed: () {
-                final userName = _userNameController.text;
-                final password = _passwordController.text;
-                ref
-                    .watch(authRepositoryProvider)
+              onPressed: () async {
+                final userName = userNameController.text;
+                final password = passwordController.text;
+
+                final authRepository = ref.read(authRepositoryProvider);
+                final loginError = await authRepository
                     .signInWithUserNameAndPassword(userName, password);
+                ref.read(userProvider.notifier).updateError(loginError);
+
+                if (loginError.isNotEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(loginError)),
+                  );
+                }
               },
               style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(

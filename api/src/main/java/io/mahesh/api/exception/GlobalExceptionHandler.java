@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
         List<String> errors = ex.getBindingResult()
                                 .getFieldErrors()
                                 .stream()
-                                .map(error -> error.getField() + " " + error.getDefaultMessage())
+                                .map(error -> error.getDefaultMessage())
                                 .collect(Collectors.toList());
         return new ErrorResponse("Validation failed", HttpStatus.BAD_REQUEST.value(), errors);
     }

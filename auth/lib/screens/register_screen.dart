@@ -1,10 +1,8 @@
-import 'package:auth/models/user.dart';
-import 'package:auth/providers/authProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
-import '../services/authService.dart';
+import 'package:lopes_talk/models/user.dart';
+import 'package:lopes_talk/providers/auth_provider.dart';
+import 'package:lopes_talk/providers/user_provider.dart';
 
 class PronounsNotifier extends StateNotifier<String> {
   PronounsNotifier() : super('she/her');
@@ -20,22 +18,26 @@ final pronounsNotifierProvider =
 });
 
 class RegistrationScreen extends ConsumerWidget {
+  RegistrationScreen({super.key});
+
+  // Move TextEditingController instances here
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _formKey = GlobalKey<FormState>();
-    final TextEditingController _usernameController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
-    final TextEditingController _firstNameController = TextEditingController();
-    final TextEditingController _lastNameController = TextEditingController();
-    final List<String> _pronouns = ['she/her', 'he/him', 'they/them', 'other'];
-    final String _selectedPronoun = ref.watch(pronounsNotifierProvider);
+    final formKey = GlobalKey<FormState>();
+    final List<String> pronouns = ['she/her', 'he/him', 'they/them', 'other'];
+    final String selectedPronoun = ref.watch(pronounsNotifierProvider);
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(233, 231, 206, 1),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: ListView(
             children: <Widget>[
               Column(
@@ -68,7 +70,7 @@ class RegistrationScreen extends ConsumerWidget {
                 ],
               ),
               TextFormField(
-                controller: _usernameController,
+                controller: usernameController,
                 decoration: const InputDecoration(labelText: 'Username'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -78,8 +80,8 @@ class RegistrationScreen extends ConsumerWidget {
                 },
               ),
               TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
+                controller: passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -89,7 +91,7 @@ class RegistrationScreen extends ConsumerWidget {
                 },
               ),
               TextFormField(
-                controller: _firstNameController,
+                controller: firstNameController,
                 decoration: const InputDecoration(labelText: 'First Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -99,7 +101,7 @@ class RegistrationScreen extends ConsumerWidget {
                 },
               ),
               TextFormField(
-                controller: _lastNameController,
+                controller: lastNameController,
                 decoration: const InputDecoration(labelText: 'Last Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -108,7 +110,7 @@ class RegistrationScreen extends ConsumerWidget {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Column(
                 children: [
                   const Padding(
@@ -118,13 +120,13 @@ class RegistrationScreen extends ConsumerWidget {
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
-                  for (String pronoun in _pronouns)
+                  for (String pronoun in pronouns)
                     ListTile(
                       tileColor: const Color.fromRGBO(215, 215, 175, .75),
                       title: Text(pronoun),
                       leading: Radio<String>(
                         value: pronoun,
-                        groupValue: _selectedPronoun,
+                        groupValue: selectedPronoun,
                         onChanged: (String? value) {
                           if (value != null) {
                             ref
@@ -134,7 +136,7 @@ class RegistrationScreen extends ConsumerWidget {
                         },
                       ),
                     ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: InkWell(
@@ -151,41 +153,61 @@ class RegistrationScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 16, 16),
-                  child: SizedBox(
-                    height: 33,
-                    width: 125,
+                  ElevatedButton.icon(
+                    onPressed: () =>
+                        ref.watch(authRepositoryProvider).registerWithGoogle(),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0.0),
+                        ),
+                      ),
+                      backgroundColor: MaterialStateProperty.all(
+                        const Color.fromRGBO(171, 178, 109, 1),
+                      ),
+                    ),
+                    icon: Image.asset(
+                      'assets/images/g-logo.png',
+                      height: 20,
+                    ),
+                    label: const Text(
+                      'Register with Google',
+                      style: TextStyle(fontSize: 13, color: Colors.black),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
+                        if (formKey.currentState!.validate()) {
                           // Attempt to register the user
                           final authService = ref.watch(authRepositoryProvider);
-                          final user =
+                          final registerError =
                               await authService.registerWithUserNameAndPassword(
                             User(
                               id: '',
-                              userName: _usernameController.text,
-                              firstName: _firstNameController.text,
-                              lastName: _lastNameController.text,
-                              pronouns: _selectedPronoun,
-                              password: _passwordController.text,
+                              userName: usernameController.text,
+                              firstName: firstNameController.text,
+                              lastName: lastNameController.text,
+                              pronouns: selectedPronoun,
+                              password: passwordController.text,
                             ),
                           );
+                          ref
+                              .read(userProvider.notifier)
+                              .updateError(registerError);
+                          ref.refresh(userProvider);
 
-                          if (user != null) {
-                            // Registration successful
-                            Navigator.pop(context);
-                          } else {
+                          if (registerError.isNotEmpty) {
                             // Registration failed
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Registration failed')),
+                              SnackBar(content: Text(registerError)),
                             );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Registration Sucess!')),
+                            );
+                            Navigator.pop(context);
                           }
                         }
                       },
@@ -205,7 +227,7 @@ class RegistrationScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
             ],
           ),

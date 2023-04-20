@@ -1,8 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.auth">
-    <uses-permission android:name="android.permission.INTERNET" />
+    package="com.example.lopes_talk">
    <application
-        android:label="auth"
+        android:label="lopes_talk"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lopes_talk/models/journey.dart';
+import 'package:lopes_talk/models/task.dart';
+import 'package:lopes_talk/providers/api_service_provider.dart';
+import 'package:lopes_talk/providers/journey_provider.dart';
+import 'package:lopes_talk/providers/task_provider.dart';
 
-class EditTaskScreen extends StatelessWidget {
-  const EditTaskScreen({super.key});
+class EditTaskScreen extends ConsumerWidget {
+  EditTaskScreen({
+    super.key,
+    required this.task,
+    required this.journey,
+  });
+
+  final Task task;
+  final Journey journey;
+  final TextEditingController taskController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    taskController.text = task.name;
+
     return Scaffold(
       backgroundColor: const Color.fromRGBO(233, 231, 206, 1),
       appBar: AppBar(
@@ -37,10 +53,11 @@ class EditTaskScreen extends StatelessWidget {
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
             child: TextField(
-              decoration: InputDecoration(
+              controller: taskController,
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Clean bathroom, read book, journal...',
               ),
@@ -49,8 +66,19 @@ class EditTaskScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
             child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed: () async {
+                  task.name = taskController.text;
+                  final apiService = ref.read(apiServiceProvider);
+                  final updated = await apiService.updateTask(task);
+
+                  if (updated) {
+                    // Refresh task lists
+                    ref.refresh(
+                      taskListProvider(journey),
+                    );
+                    ref.refresh(activeTaskListProvider);
+                    Navigator.pop(context);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromRGBO(171, 178, 109, 1),

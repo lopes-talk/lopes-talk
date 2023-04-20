@@ -1,12 +1,12 @@
-import 'package:auth/screens/about.dart';
-import 'package:auth/screens/history.dart';
-import 'package:auth/screens/home.dart';
-import 'package:auth/screens/journeyPaths.dart';
-import 'package:auth/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lopes_talk/screens/about_screen.dart';
+import 'package:lopes_talk/screens/history_screen.dart';
+import 'package:lopes_talk/screens/home_screen.dart';
+import 'package:lopes_talk/screens/journey_paths_screen.dart';
+import 'package:lopes_talk/screens/settings_screen.dart';
 
-import '../providers/navProvider.dart';
+import '../providers/nav_provider.dart';
 
 class BottomNavigation extends ConsumerWidget {
   final List<BottomNavigationBarItem> bottomNavigationItems = [
@@ -42,7 +42,7 @@ class BottomNavigation extends ConsumerWidget {
     const HistoryScreen(),
     const HomeScreen(),
     const AboutScreen(),
-    const SettingsScreen(),
+    SettingsScreen(),
   ];
 
   BottomNavigation({Key? key}) : super(key: key);

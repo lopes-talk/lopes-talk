@@ -1,6 +1,6 @@
 package io.mahesh.api.controller;
-
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.naming.AuthenticationException;
 
@@ -64,28 +64,48 @@ public class UserController {
      * @param user
      */
     public void autoGeneratePaths(Users user) {
-        ArrayList<String> setJourneyPaths = new ArrayList<String>() {{
-            add("Physical");
-            add("Emotional");
-            add("Practical");
-            add("Mental");
-            add("Social");
-        }};
-        for (String journeyString : setJourneyPaths ) {
-            // Create a journey for user
+        Map<String, String[]> taskMap = new HashMap<>();
+        // add tasks to the map
+
+        String[] emotional = {"Mediate - 30 Minutes", "Read - 20 mins", "Practice journaling", "Reflect on your day - 5 mins before bed", "NO screentime - 10 mins", "Take a deep breathe and take a walk when feeling overwhelmed"};
+        String[] mental = {"Listen to a podcast", "Speak affirmations: \"I am capable of achieving my goals\"", "Laugh or smile once today :D", "Listen to an upbeat playlist", "Practice a new skill", "Play a brain game"};
+        String[] physical = {"Go for a walk", "Take a relaxing bath/shower", "Drink a glass of water", "Complete nightly routine", "Take a nap", "Morning stretch - 5 mins"};
+        String[] practical = {"Make bed", "Clean up email inbox", "Do that thing you've been putting off", "Put on sunscreen before leaving!", "Make to do list for the day", "Focus on the present moment"};
+        String[] social = {"Call a friend", "Meet with a friend for a walk and talk", "Write a letter", "Host a game night for friends", "Positive social media - avoid the negatives", "Reflect on boundaries with friends"};
+
+        // Add arrays to the map
+        taskMap.put("Emotional", emotional);
+        taskMap.put("Mental", mental);
+        taskMap.put("Physical", physical);
+        taskMap.put("Practical", practical);
+        taskMap.put("Social", social);
+
+        // Arrays to grab all 
+        // ArrayList<String> setJourneyPaths = new ArrayList<String>() {{
+        //     add("Physical");
+        //     add("Emotional");
+        //     add("Practical");
+        //     add("Mental");
+        //     add("Social");
+        // }};
+
+        // get the keys as an array
+        String[] journeyKeys = taskMap.keySet().toArray(new String[0]);
+
+         // Create a journey for user
+        for (String journeyString : journeyKeys ) {
             String jName = journeyString;
             boolean isActive = false;
             String userId = user.getId();
             JourneyPath jModel = new JourneyPath(jName, isActive, userId);
-
             jModel = journeyService.createJourneyPath(jModel);
+           
+            String[] tasks = taskMap.get(journeyString);
 
-            // Create the 4 tasks for each journey 
-            for (int t = 0; t < 6; t++) {
+            for (String task : tasks) {
                 //Create tasks for users that belong to the created journey
-                String tName = "Task " + t;
                 boolean status = false;
-                Tasks tModel = new Tasks(tName, status, userId, jModel.getId());
+                Tasks tModel = new Tasks(task, status, userId, jModel.getId());
                 taskService.createTask(tModel);
             }
         }

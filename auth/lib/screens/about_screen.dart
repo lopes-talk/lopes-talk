@@ -1,5 +1,5 @@
-import 'package:auth/widgets/bigCard.dart';
 import 'package:flutter/material.dart';
+import 'package:lopes_talk/widgets/big_card.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
