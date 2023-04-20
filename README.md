@@ -1,21 +1,59 @@
-# LopesTalk
+<table>
+  <tr>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
 
-LopesTalk is a mental health app designed to empower students to prioritize their well-being through fun and engaging self-care activities. Our mission is to help students succeed in their academic and personal goals by focusing on self-care, one task at a time. As Lopers, we are passionate about making a positive impact in the GCU community and beyond, and we believe that by taking care of ourselves, we can better support and care for those around us. With our innovative approach and commitment to mental health, LopesTalk is here to help students thrive.
+  <tr>
+    <td colspan=3><img width="200px" height="200px" src="https://avatars.githubusercontent.com/u/129710298?s=200&v=4" alt="LopesTalk LOGO"></td>
+    <td colspan=4 align="center"><h1>LopesTalk Project Portfolio</h1></td>
+    <td colspan=3><img width="200px" height="200px" src="https://avatars.githubusercontent.com/u/129710298?s=200&v=4" alt="LopesTalk LOGO"></td>
+  </tr>
+  <tr>
+    <td colspan=10 align="center"><h3>Jesseña Quiñones</h3></td>
+  </tr>
+    <tr>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+</table>
+
 
 ## Table of Contents
 
+- [Introduction](#introduction)
 - [Requirements](#requirements)
   - [Functional Requirements](#functional-requirements)
   - [Non-Functional Requirements (NFRs)](#non-functional-requirements-nfrs)
 - [Technologies & Tools](#technologies--tools)
 - [Cloud Deployment](#cloud-deployment)
   - [Frontend (Flutter App)](#frontend-flutter-app)
-  - [Backend (API)](#backend-api)
+  - [Backend (Spring Boot)](#backend-spring-boot)
   - [Cross-Origin Resource Sharing (CORS)](#cross-origin-resource-sharing-cors)
   - [Monitoring](#monitoring)
 - [Technical Approach](#technical-approach)
 - [Risks & Challenges](#risks--challenges)
 - [Contacts](#contacts)
+
+#### Introduction
+
+LopesTalk is a mental health app designed to empower students to prioritize their well-being through fun and engaging self-care activities. Our mission is to help students succeed in their academic and personal goals by focusing on self-care, one task at a time. As Lopers, we are passionate about making a positive impact in the GCU community and beyond, and we believe that by taking care of ourselves, we can better support and care for those around us. With our innovative approach and commitment to mental health, LopesTalk is here to help students thrive.
 
 ## Requirements
 
@@ -39,8 +77,9 @@ LopesTalk is a mental health app designed to empower students to prioritize thei
 LopesTalk is built using the following technologies and tools:
 - Flutter \[v3.7.10]
 - Dart \ [2.19.6]
+- Spring Boot \[3.0.5]
   - MongoDB.Driver \[v2.15.0]
-- Java [v17.0.5]
+  - Java [v17.0]
 -  MongoDB Atlas
 - Hosting
   - AWS Hosting Elastic Beanstalk Service
@@ -82,7 +121,7 @@ LopesTalk is deployed on the cloud using the following services:
 
 The Flutter app is deployed through the Google Play Store.
 
-### Backend (API)
+### Backend (Spring Boot)
 
 The custom API is deployed on AWS Elastic Beanstalk, a cloud platform as a service (PaaS) that allows us to easily deploy and scale web applications.
 
