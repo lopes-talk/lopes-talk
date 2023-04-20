@@ -113,6 +113,7 @@ LopesTalk is built using the following technologies and tools:
     </td>
 </table>
 
+
 ## Cloud Deployment
 
 LopesTalk is deployed on the cloud using the following services:
@@ -133,6 +134,7 @@ To allow cross-origin requests from the Flutter app to the API
 
 LopesTalk uses UptimeRobot to monitor errors and exceptions that occur in the app.
 
+
 ## Technical Approach
 
 Our application follows a client-server architecture, with the Flutter framework serving as the client and Spring Boot serving as the server. The client-server architecture allows for a clear separation of concerns between the user interface and the application logic.
@@ -142,6 +144,7 @@ In terms of development methodology, we have opted for a waterfall approach. Thi
 We are also following a modular design pattern, which allows us to break down the application into smaller, reusable components. This makes it easier to maintain and update the codebase over time.
 
 Finally, we are using MongoDB Atlas as our database. This cloud-based database service provides us with a scalable, secure, and reliable database solution for our application.
+
 
 ## Risks & Challenges
 
@@ -160,7 +163,8 @@ A few risks when writing the app was the following:
 - Another risk was the idea of implementing an external API. This would save me time instead of having to fully create an API by scratch for motivational quotes.
 
 One of the main challenges in developing LopesTalk is creating engaging and effective self-care resources that resonate with students. To tackle this, I researched various self-care routes and gathered relevant examples. Providing users with a clear understanding of each path with tasks.
----
+
+
 ## Contacts
 
 - Jesseña Quiñones - [LinkedIn](https://www.linkedin.com/in/jessena-quinones) - [GitHub](https://github.com/jessenaqu)
