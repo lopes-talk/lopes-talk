@@ -164,6 +164,47 @@
 <p>Finally, we are using MongoDB Atlas as our database. This cloud-based database service provides us with a scalable, secure, and reliable database solution for our application.</p>
 
 
+<table>
+  <tr>
+    <td>
+      <figure>
+        <img width="300" src="./diagrams/LogicalArchitecture.png" alt="Logical Architecture Diagram">
+        <figcaption>Figure 1: Logical Architecture Diagram</figcaption>
+      </figure>
+    </td>
+    <td>
+      <figure>
+        <img width="300" src="./diagrams/Physical-Solution.png" alt="Physical Solution Diagram">
+        <figcaption>Figure 2: Physical Solution Diagram</figcaption>
+      </figure>
+    </td>
+    <td>
+      <figure>
+        <img src="image3.png" alt="Image 3" width="300"/>
+        <figcaption>Figure 3: Description of image 3</figcaption>
+      </figure>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <figure>
+        <img src="image4.png" alt="Image 4" width="300"/>
+        <figcaption>Figure 4: Description of image 4</figcaption>
+      </figure>
+    </td>
+    <td>
+      <figure>
+        <img src="image5.png" alt="Image 5" width="300"/>
+        <figcaption>Figure 5: Description of image 5</figcaption>
+      </figure>
+    </td>
+    <td></td>
+  </tr>
+</table>
+
+
+
+
 <h2>Risks & Challenges</h2>
 
 <p>A few challenges when writing the app was the following:</p>
