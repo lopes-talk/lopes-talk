@@ -17,12 +17,12 @@ public class Users {
 
     @NotNull
     @NotBlank
-    @Size(min = 5, max = 15, message = "Username must be between {min} and {max} characters")
+    @Size(min = 5, max = 50, message = "Username must be between {min} and {max} characters")
     private String userName;
 
     @NotNull
     @NotBlank
-    @Size(min = 8, max = 15, message = "Password must be between {min} and {max} characters")
+    @Size(min = 8, max = 100, message = "Password must be between {min} and {max} characters")
     @Pattern(regexp = ".*[!@#$%^&+=].*", message = "Password must contain at least one special character")
     private String password;
 

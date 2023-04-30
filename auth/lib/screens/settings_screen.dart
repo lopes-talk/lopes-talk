@@ -32,7 +32,7 @@ class SettingsScreen extends ConsumerWidget {
         child: Column(
           children: [
             BigCard(
-                title: 'Proflie',
+                title: 'Profile',
                 body: "Pronouns: $pronouns\nName: $fristName $lastName"),
           ],
         ),

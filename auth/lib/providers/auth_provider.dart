@@ -11,9 +11,10 @@ final authRepositoryProvider = Provider(
     googleSignIn: GoogleSignIn(
       // The OAuth client id of your app. This is required.
       clientId:
-          "441135317604-5d0l0990q4bh6nl99r2ve7o34cca85vl.apps.googleusercontent.com",
+          "279762071305-bbelue057bt77ccbhf82c26d63abqhu8.apps.googleusercontent.com",
       // If you need to authenticate to a backend server, specify its OAuth client. This is optional.
       //serverClientId: '',
     ),
   ),
 );
+//441135317604-5d0l0990q4bh6nl99r2ve7o34cca85vl.apps.googleusercontent.com

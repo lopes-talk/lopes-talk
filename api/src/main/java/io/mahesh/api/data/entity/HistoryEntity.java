@@ -1,14 +1,13 @@
 package io.mahesh.api.data.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
-
-import io.mahesh.api.model.Tasks;
+import io.mahesh.api.model.History;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,31 +19,33 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document("Task")
-public class TasksEntity {
+@Document("History")
+public class HistoryEntity {
     @Id
     private String id;
-
-    @DBRef
-    private JourneyPathEntity journey;
 
     @NonNull
     private String name;
 
-    private boolean status;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime dateCompleted;
 
     @NonNull
     @DBRef
     private UserEntity user;
 
     /**
-     * Converts Task Model ==> TasksEntity
+     * Converts History Model ==> TasksEntity
      */
-    public TasksEntity(Tasks task) {
-        this.id = task.getId();
-        this.name = task.getName();
-        this.journey = new JourneyPathEntity(task.getJourneyId());
-        this.status = task.isStatus();
-        this.user = new UserEntity(task.getUserId());
+    public HistoryEntity(History history) {
+        this.id = history.getId();
+        this.name = history.getName();
+        this.dateCompleted = history.getDateCompleted();
+        this.user = new UserEntity(history.getUserId());
+    }
+
+    public HistoryEntity(String name, UserEntity user) {
+        this.name = name;
+        this.user = user;
     }
 }

@@ -20,6 +20,7 @@ import io.mahesh.api.model.JourneyPath;
 import io.mahesh.api.model.Tasks;
 import io.mahesh.api.model.Users;
 import io.mahesh.api.response.ReponseObject;
+import io.mahesh.api.service.HistoryService;
 import io.mahesh.api.service.TaskService;
 
 @RestController
@@ -28,6 +29,8 @@ import io.mahesh.api.service.TaskService;
 public class TasksController {
     @Autowired
     private TaskService taskService;
+    @Autowired 
+    private HistoryService historyService;
 
     @GetMapping("/task/{id}") 
     private ResponseEntity<ReponseObject<Object>> getTaskById(@PathVariable("id") String id) {
@@ -51,6 +54,15 @@ public class TasksController {
     private ResponseEntity<ReponseObject<Object>> getTaskByJourney(@RequestBody JourneyPath journey) {
         ArrayList<Tasks> tasks = taskService.findTasksByJourney(journey);
         return ResponseEntity.status(HttpStatus.OK).body(new ReponseObject<>("Success", HttpStatus.OK.value(), "Tasks retrieved successfully", tasks));
+    }
+
+    @PostMapping("/task/complete")
+    private ResponseEntity<ReponseObject<Object>> getTaskByJourney(@RequestBody Tasks task) {
+        // First complete the task
+        Tasks tasks = taskService.completeTask(task);
+        // Next create history of task for history view
+        historyService.createHistory(task);
+        return ResponseEntity.status(HttpStatus.OK).body(new ReponseObject<>("Success", HttpStatus.OK.value(), "Tasks completed successfully", tasks));
     }
 
     @PutMapping("/task")

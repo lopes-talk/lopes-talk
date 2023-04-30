@@ -180,22 +180,22 @@
     </td>
     <td>
       <figure>
-        <img src="image3.png" alt="Image 3" width="300"/>
-        <figcaption>Figure 3: Description of image 3</figcaption>
+        <img width="300" src="./diagrams/SchemaDiagram.png" alt="Schema Diagram">
+        <figcaption>Figure 3: Schema Diagram</figcaption>
       </figure>
     </td>
   </tr>
   <tr>
     <td>
-      <figure>
-        <img src="image4.png" alt="Image 4" width="300"/>
-        <figcaption>Figure 4: Description of image 4</figcaption>
+       <figure>
+        <img width="300" src="./diagrams/Sitemap.png" alt="Sitemap Diagram">
+        <figcaption>Figure 4: Sitemap Diagram</figcaption>
       </figure>
     </td>
     <td>
-      <figure>
-        <img src="image5.png" alt="Image 5" width="300"/>
-        <figcaption>Figure 5: Description of image 5</figcaption>
+      <<figure>
+        <img width="300" src="./diagrams/UML.png" alt="UML Diagram">
+        <figcaption>Figure 5: UML Diagram</figcaption>
       </figure>
     </td>
     <td></td>

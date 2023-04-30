@@ -151,4 +151,26 @@ public class TaskService {
             return false;
         }
     }
+
+    public Tasks completeTask (Tasks task) {
+        Tasks updatedTaskModel = null;
+        try {
+            Optional<TasksEntity> tEntity = taskRepository.findById(task.getId());
+            if (!tEntity.isPresent()) {
+               //TODO: Log the task not found
+               throw new ResourceNotFoundException("Task not found with id " + task.getId());
+            }
+            // Set the task model to completed status
+            TasksEntity updatedTask = new TasksEntity(task);
+            updatedTask.setStatus(true);
+            TasksEntity updatedTaskEntity = taskRepository.save(updatedTask);
+            if (Objects.nonNull(updatedTaskEntity)) {
+                updatedTaskModel = new Tasks(updatedTaskEntity);
+            }
+
+        } catch (DataAccessException e) {
+            // TODO: Log the exception
+        }
+        return updatedTaskModel;
+    } 
 }

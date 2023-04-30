@@ -23,9 +23,6 @@ public class Tasks {
 
     private boolean status;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private Date dateCompleted;
-
     @NotBlank
     @NotNull
     private String userId;
@@ -50,7 +47,6 @@ public class Tasks {
         this.id = task.getId();
         this.name = task.getName();
         this.status = task.isStatus();
-        this.dateCompleted = task.getDateCompleted();
         if(task.getJourney() != null) {
             this.journeyId = task.getJourney().getId();
         }

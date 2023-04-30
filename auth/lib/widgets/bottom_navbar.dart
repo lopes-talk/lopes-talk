@@ -12,28 +12,28 @@ class BottomNavigation extends ConsumerWidget {
   final List<BottomNavigationBarItem> bottomNavigationItems = [
     const BottomNavigationBarItem(
       label: 'Journey Paths',
-      icon: Icon(Icons.book_rounded),
-      activeIcon: Icon(Icons.book_outlined),
+      icon: Icon(Icons.book_outlined),
+      activeIcon: Icon(Icons.book_rounded),
     ),
     const BottomNavigationBarItem(
       label: 'History',
-      icon: Icon(Icons.manage_history_rounded),
-      activeIcon: Icon(Icons.history),
+      icon: Icon(Icons.history),
+      activeIcon: Icon(Icons.manage_history_rounded),
     ),
     const BottomNavigationBarItem(
       label: 'Home',
-      icon: Icon(Icons.home_rounded),
-      activeIcon: Icon(Icons.home_outlined),
+      icon: Icon(Icons.home_outlined),
+      activeIcon: Icon(Icons.home_rounded),
     ),
     const BottomNavigationBarItem(
       label: 'About',
-      icon: Icon(Icons.info_rounded),
-      activeIcon: Icon(Icons.info_outline),
+      icon: Icon(Icons.info_outline),
+      activeIcon: Icon(Icons.info_rounded),
     ),
     const BottomNavigationBarItem(
       label: 'Settings',
-      icon: Icon(Icons.settings_rounded),
-      activeIcon: Icon(Icons.settings_outlined),
+      icon: Icon(Icons.settings_outlined),
+      activeIcon: Icon(Icons.settings_rounded),
     ),
   ];
 
