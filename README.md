@@ -55,6 +55,7 @@
   </li>
   <li><a href="#technical-approach">Technical Approach</a></li>
   <li><a href="#risks--challenges">Risks &amp; Challenges</a></li>
+  <li><a href="#demonstrations">Demonstrations</a></li>
   <li><a href="#contacts">Contacts</a></li>
 </ul>
 
@@ -228,6 +229,12 @@
 </ul>
 
 <p>One of the main challenges in developing LopesTalk is creating engaging and effective self-care resources that resonate with students. To tackle this, I researched various self-care routes and gathered relevant examples. Providing users with a clear understanding of each path with tasks.</p>
+
+
+<h2>Demonstrations</h2>
+
+<p><a href="https://www.loom.com/share/f4eee4d4013f48d48293ff7592d6984f">Final Project Completion and Presentation</p>
+<p><a href="https://www.loom.com/share/1ff1b925fbca4d1a8cc01d0f8edce9d6">LopesTalk Benchmark</p>
 
 
 <h2>Contacts</h2>
