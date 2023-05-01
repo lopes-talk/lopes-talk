@@ -42,14 +42,13 @@ class HomeTaskCard extends ConsumerWidget {
                       ? ElevatedButton(
                           onPressed: () async {
                             task.status = true;
-                            task.dateCompleted = DateTime.now();
                             final apiService = ref.read(apiServiceProvider);
-                            final updated = await apiService.updateTask(task);
+                            final updated = await apiService.completeTask(task);
 
                             if (updated) {
                               // Refresh task lists
                               ref.refresh(activeTaskListProvider);
-                              ref.refresh(taskListByUserProvider);
+                              ref.refresh(historyTaskListByUserProvider);
                             }
                           },
                           style: ElevatedButton.styleFrom(

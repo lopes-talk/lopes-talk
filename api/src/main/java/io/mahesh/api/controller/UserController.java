@@ -36,7 +36,6 @@ public class UserController {
     @Autowired
     private TaskService taskService;
 
-    // TODO  - Separate into credentials mdoel
     @PostMapping("/login")
     private ResponseEntity<ReponseObject<Object>> loginUser(@RequestBody Users user) throws AuthenticationException {
         Users uModel;
@@ -44,7 +43,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new ReponseObject<>("Success", HttpStatus.OK.value(), "User logged in successfully", uModel));   
      }
 
-    // TODO  - Separate into credentials mdoel
     @PostMapping("/register")
     private ResponseEntity<ReponseObject<Object>> registerUser(@Valid @RequestBody Users user) {
         Users uModel = userService.registerUser(user);

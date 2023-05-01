@@ -20,7 +20,11 @@ import io.mahesh.api.exception.ResourceNotFoundException;
 import io.mahesh.api.model.JourneyPath;
 import io.mahesh.api.model.Tasks;
 import io.mahesh.api.model.Users;
+
 import io.micrometer.common.util.StringUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class TaskService {
@@ -31,20 +35,21 @@ public class TaskService {
     @Autowired
     private JourneyPathRepository journeyPathRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(JourneyPathService.class);
+
     public Tasks findTaskById (String id) {
         if(StringUtils.isBlank(id)) {
-            // TODO: Log that field exception
             throw new FieldValidationException(id, "Id is required");
         }
         try {
             Optional<TasksEntity> tEntity = taskRepository.findById(id);
             if (!tEntity.isPresent()) {
-               //TODO: Log the user not found
+                logger.warn("findTaskById - Task not found with id " + id);
                throw new ResourceNotFoundException("Task not found with id " + id);
             }
             return new Tasks(tEntity.get());
         } catch (DataAccessException e) {
-            // TODO: Log the exception
+            logger.error("findTaskById database error: {}", e.getMessage());
         }
         return null; 
     }
@@ -53,19 +58,19 @@ public class TaskService {
         try {
             Optional<UserEntity> uEntity = userRepository.findById(task.getUserId());
             if (!uEntity.isPresent()) {
-                //TODO: Log the user not found
+                logger.warn("createTask - User not found with id " + task.getUserId());
                 throw new ResourceNotFoundException("User not found with id " + task.getUserId());
             }
             Optional<JourneyPathEntity> jEntity = journeyPathRepository.findById(task.getJourneyId());
             if (!jEntity.isPresent()) {
-                //TODO: Log the jEntity not found
+                logger.warn("createTask - Journey not found with id " + task.getJourneyId());
                 throw new ResourceNotFoundException("Journey not found with id " + task.getJourneyId());
             }
             TasksEntity tEntity = new TasksEntity(task);
             tEntity = taskRepository.save(tEntity);
             return new Tasks(tEntity);
         } catch (DataAccessException e) {
-             // TODO: Log the exception
+            logger.error("createTask database error: {}", e.getMessage());
             return null;
         }
     }
@@ -73,15 +78,13 @@ public class TaskService {
     public ArrayList<Tasks> findTasksByUser (Users user) {
         ArrayList<Tasks> taskModels = new ArrayList<>();
         if(StringUtils.isBlank(user.getId())) {
-            // TODO: Log that field exception
             throw new FieldValidationException(user.getId(), "User id is required");
         }
-        //TODO: Add another catch for general exception to log
         try {
             UserEntity UEntity = new UserEntity(user.getId());
             List<TasksEntity> tasks = taskRepository.findByUser(UEntity);
             if(tasks.isEmpty()) {
-                //TODO: Log the tasks not found
+                logger.warn("findTasksByUser - Did not find tasks for user: " + user.getId());
                 throw new ResourceNotFoundException("Did not find tasks for user: " + user.getId());
             }
             for (TasksEntity task : tasks) {
@@ -89,7 +92,7 @@ public class TaskService {
                 taskModels.add(taskModel);
             }
         } catch (DataAccessException e) {
-             // TODO: Log the exception
+            logger.error("findTasksByUser database error: {}", e.getMessage());
         }
         return taskModels;
     }
@@ -97,14 +100,13 @@ public class TaskService {
     public ArrayList<Tasks> findTasksByJourney (JourneyPath journey) {
         ArrayList<Tasks> taskModels = new ArrayList<>();
         if(StringUtils.isBlank(journey.getId())) {
-            // TODO: Log that field exception
             throw new FieldValidationException(journey.getId(), "Journey id is required");
         }        
         try {
             JourneyPathEntity jEntity = new JourneyPathEntity(journey);
             List<TasksEntity> tasks = taskRepository.findByJourney(jEntity);
             if(tasks.isEmpty()) {
-                //TODO: Log the tasks not found
+                logger.warn("findTasksByJourney - Did not find tasks for journey: " + journey.getId());
                 throw new ResourceNotFoundException("Did not find tasks for journey: " + journey.getId());
             }
             for (TasksEntity task : tasks) {
@@ -112,7 +114,7 @@ public class TaskService {
                 taskModels.add(taskModel);
             }
         } catch (DataAccessException e) {
-            // TODO: Log the exception
+            logger.error("findTasksByJourney database error: {}", e.getMessage());
         }
         return taskModels;
     }
@@ -122,7 +124,7 @@ public class TaskService {
         try {
             Optional<TasksEntity> tEntity = taskRepository.findById(taskModel.getId());
             if (!tEntity.isPresent()) {
-               //TODO: Log the task not found
+                logger.warn("updateTask - Task not found with id " + taskModel.getId());
                throw new ResourceNotFoundException("Task not found with id " + taskModel.getId());
             }
             TasksEntity updatedTask = new TasksEntity(taskModel);
@@ -131,7 +133,7 @@ public class TaskService {
                 updatedTaskModel = new Tasks(updatedTaskEntity);
             }
         } catch (DataAccessException e) {
-            // TODO: Log the exception
+            logger.error("updateTask database error: {}", e.getMessage());
         }
         return updatedTaskModel;
     }
@@ -140,14 +142,14 @@ public class TaskService {
         try {
             Optional<TasksEntity> tEntity = taskRepository.findById(taskModel.getId());
             if (!tEntity.isPresent()) {
-               //TODO: Log the task not found
+                logger.warn("deleteTask - Task not found with id " + taskModel.getId());
                throw new ResourceNotFoundException("Task not found with id " + taskModel.getId());
             }
             TasksEntity taskToDelete = new TasksEntity(taskModel);
             taskRepository.delete(taskToDelete);
             return true;
         } catch (DataAccessException e) {
-            // TODO: Log the exception
+            logger.error("deleteTask database error: {}", e.getMessage());
             return false;
         }
     }
@@ -157,7 +159,7 @@ public class TaskService {
         try {
             Optional<TasksEntity> tEntity = taskRepository.findById(task.getId());
             if (!tEntity.isPresent()) {
-               //TODO: Log the task not found
+                logger.warn("completeTask - Task not found with id " + task.getId());
                throw new ResourceNotFoundException("Task not found with id " + task.getId());
             }
             // Set the task model to completed status
@@ -169,7 +171,7 @@ public class TaskService {
             }
 
         } catch (DataAccessException e) {
-            // TODO: Log the exception
+            logger.error("completeTask database error: {}", e.getMessage());
         }
         return updatedTaskModel;
     } 

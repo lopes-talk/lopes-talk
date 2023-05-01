@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lopes_talk/models/task.dart';
+import 'package:lopes_talk/models/history_task.dart';
 
 class HistoryCard extends ConsumerWidget {
   const HistoryCard({
@@ -10,7 +10,7 @@ class HistoryCard extends ConsumerWidget {
   }) : super(key: key);
 
   final String date;
-  final List<Task> tasks;
+  final List<HistoryTask> tasks;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

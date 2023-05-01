@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:lopes_talk/models/history_task.dart';
 import 'package:lopes_talk/providers/user_provider.dart';
 import '../models/user.dart';
 import '../models/task.dart';
@@ -30,12 +32,12 @@ class ApiService {
   }
 
 // Get Tasks By User
-  Future<Map<String, List<Task>>> getTasksByUser() async {
+  Future<Map<String, List<HistoryTask>>> getHistoryTasksByUser() async {
     User? user = userNotifier.getUser();
 
     if (user != null) {
       final response = await http.post(
-        Uri.parse('$baseUrl/task/user'),
+        Uri.parse('$baseUrl/history/user'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(user.toJson()),
       );
@@ -43,11 +45,8 @@ class ApiService {
       if (response.statusCode == 200) {
         var responseData = json.decode(response.body);
         List<dynamic> taskData = responseData['data'];
-        List<Task> tasks =
-            taskData.map((taskData) => Task.fromJson(taskData)).toList();
-
-        // Filter tasks with task.status = true
-        tasks = tasks.where((task) => task.status == true).toList();
+        List<HistoryTask> tasks =
+            taskData.map((taskData) => HistoryTask.fromJson(taskData)).toList();
 
         // Sort tasks by task.dateCompleted in descending order
         tasks.sort((a, b) =>
@@ -56,8 +55,8 @@ class ApiService {
                     a.dateCompleted ?? DateTime.fromMicrosecondsSinceEpoch(0)));
 
         // Group tasks by date
-        Map<String, List<Task>> groupedTasks = {};
-        for (Task task in tasks) {
+        Map<String, List<HistoryTask>> groupedTasks = {};
+        for (HistoryTask task in tasks) {
           if (task.dateCompleted != null) {
             String dateStr =
                 task.dateCompleted!.toIso8601String().split('T')[0];
@@ -69,6 +68,8 @@ class ApiService {
           }
         }
         return groupedTasks;
+      } else if (response.statusCode == 404) {
+        return {};
       } else {
         throw Exception('Failed to load tasks');
       }
@@ -123,9 +124,9 @@ class ApiService {
   }
 
   // Update Task
-  Future<bool> updateTask(Task task) async {
-    final response = await http.put(
-      Uri.parse('$baseUrl/task'),
+  Future<bool> completeTask(Task task) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/task/complete'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode(task.toJson()),
     );

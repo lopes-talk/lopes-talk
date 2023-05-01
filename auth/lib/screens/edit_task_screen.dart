@@ -69,7 +69,7 @@ class EditTaskScreen extends ConsumerWidget {
                 onPressed: () async {
                   task.name = taskController.text;
                   final apiService = ref.read(apiServiceProvider);
-                  final updated = await apiService.updateTask(task);
+                  final updated = await apiService.completeTask(task);
 
                   if (updated) {
                     // Refresh task lists

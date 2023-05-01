@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lopes_talk/models/history_task.dart';
 import 'package:lopes_talk/models/task.dart';
 import 'package:lopes_talk/providers/task_provider.dart';
 import 'package:lopes_talk/widgets/history_task_card.dart';
@@ -9,10 +10,10 @@ class HistoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tasksAsyncValue = ref.watch(taskListByUserProvider);
+    final tasksAsyncValue = ref.watch(historyTaskListByUserProvider);
 
     return tasksAsyncValue.when(
-      data: (Map<String, List<Task>> tasksByDate) {
+      data: (Map<String, List<HistoryTask>> tasksByDate) {
         return Scaffold(
           backgroundColor: const Color.fromRGBO(233, 231, 206, 1),
           appBar: AppBar(
@@ -31,7 +32,7 @@ class HistoryScreen extends ConsumerWidget {
             itemCount: tasksByDate.length,
             itemBuilder: (context, index) {
               String date = tasksByDate.keys.elementAt(index);
-              List<Task> tasks = tasksByDate[date]!;
+              List<HistoryTask> tasks = tasksByDate[date]!;
               return HistoryCard(date: date, tasks: tasks);
             },
           ),

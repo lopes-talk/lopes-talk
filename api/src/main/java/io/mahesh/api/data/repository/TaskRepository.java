@@ -14,6 +14,3 @@ public interface TaskRepository extends MongoRepository<TasksEntity, String> {
     List<TasksEntity> findByUser(UserEntity user);
     List<TasksEntity> findByJourney(JourneyPathEntity journey);
 }
-
-
-

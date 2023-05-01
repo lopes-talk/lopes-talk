@@ -19,6 +19,9 @@ import io.mahesh.api.model.JourneyPath;
 import io.mahesh.api.model.Users;
 import io.micrometer.common.util.StringUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /*
  * Service: JourneyPath Operations
  */
@@ -29,36 +32,37 @@ public class JourneyPathService {
     @Autowired
     private UserRepository userRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(JourneyPathService.class);
+
     public JourneyPath createJourneyPath(JourneyPath journeyPath) {
         try {
             Optional<UserEntity> uEntity = userRepository.findById(journeyPath.getUserId());
             if (!uEntity.isPresent()) {
-                //TODO: Log the user not found
+                logger.warn("createJourneyPath - User not found with id " + journeyPath.getUserId());
                 throw new ResourceNotFoundException("User not found with id " + journeyPath.getUserId());
             }
             JourneyPathEntity jEntity = new JourneyPathEntity(journeyPath);
             jEntity = journeyPathRepository.save(jEntity);
             return new JourneyPath(jEntity);
         } catch (DataAccessException e) {
-             // TODO: Log the exception
+             logger.error("createJourneyPath database error: {}", e.getMessage());
              return null;
         }
     }
 
     public JourneyPath getJourneyPathById(String id) {
         if(StringUtils.isBlank(id)) {
-            // TODO: Log that field exception
             throw new FieldValidationException(id, "Id is required");
         }
         try {
             Optional<JourneyPathEntity> jEntity = journeyPathRepository.findById(id);
             if(!jEntity.isPresent()) {
-                //TODO: Log the journey not found
+                logger.warn("getJourneyPathById - Journey not found with id " + id);
                throw new ResourceNotFoundException("Journey not found with id " + id);
             }
             return new JourneyPath(jEntity.get());
         } catch (DataAccessException e) {
-            // TODO: Log the exception
+            logger.error("getJourneyPathById database error: {}", e.getMessage());
         }
         return null; 
     }
@@ -66,14 +70,13 @@ public class JourneyPathService {
     public ArrayList<JourneyPath> findJourneyPathsByUser(Users user) {
         ArrayList<JourneyPath> jModels = new ArrayList<>();
         if(StringUtils.isBlank(user.getId())) {
-            // TODO: Log that field exception
             throw new FieldValidationException(user.getId(), "User id is required");
         }
         try {
             UserEntity UEntity = new UserEntity(user.getId());
             List<JourneyPathEntity> journeys = journeyPathRepository.findByUser(UEntity);
             if(journeys.isEmpty()) {
-                //TODO: Log the tasks not found
+                logger.warn("findJourneyPathsByUser - Did not find journies for user: " + user.getId());
                 throw new ResourceNotFoundException("Did not find journies for user: " + user.getId());
             }
             for (JourneyPathEntity journey : journeys) {
@@ -81,7 +84,7 @@ public class JourneyPathService {
                 jModels.add(jModel);
             }
         } catch (DataAccessException e) {
-            // TODO: Log the exception
+            logger.error("findJourneyPathsByUser database error: {}", e.getMessage());
         }
         return jModels;
     }
@@ -91,7 +94,7 @@ public class JourneyPathService {
         try {
             Optional<JourneyPathEntity> jEntity = journeyPathRepository.findById(journeyPath.getId());
             if (!jEntity.isPresent()) {
-               //TODO: Log the j not found
+               logger.warn("Journey not found with id " + journeyPath.getId());
                throw new ResourceNotFoundException("Journey not found with id " + journeyPath.getId());
             }
             JourneyPathEntity updatedJourney = new JourneyPathEntity(journeyPath);
@@ -100,7 +103,7 @@ public class JourneyPathService {
                 updatedJourneyModel = new JourneyPath(updatedJourneyEntity);
             }
         } catch (DataAccessException e) {
-            // TODO: Log the exception
+            logger.error("updateJourneyPath database error: {}", e.getMessage());
         }
         return updatedJourneyModel;
     }
@@ -117,7 +120,7 @@ public class JourneyPathService {
                 jModelList.add(new JourneyPath(jEntity));
             }
         } catch (DataAccessException e) { 
-            // TODO: Log the exception
+            logger.error("updateJourneyPaths database error: {}", e.getMessage());
         }
         return jModelList;    
     }

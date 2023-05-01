@@ -1,9 +1,5 @@
 package io.mahesh.api.model;
 
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import io.mahesh.api.data.entity.TasksEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

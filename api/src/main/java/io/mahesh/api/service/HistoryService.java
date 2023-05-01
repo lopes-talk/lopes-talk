@@ -1,7 +1,6 @@
 package io.mahesh.api.service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +18,8 @@ import io.mahesh.api.exception.ResourceNotFoundException;
 import io.mahesh.api.model.History;
 import io.mahesh.api.model.Tasks;
 import io.mahesh.api.model.Users;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class HistoryService {
@@ -27,27 +28,27 @@ public class HistoryService {
     @Autowired 
     private UserRepository userRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(HistoryService.class);
+
     public ArrayList<History> findHistoryByUser (Users user) {
         ArrayList<History> historyModels = new ArrayList<>();
         if(StringUtils.isBlank(user.getId())) {
-            // TODO: Log that field exception
             throw new FieldValidationException(user.getId(), "User id is required");
         }
-        //TODO: Add another catch for general exception to log
         try {
             UserEntity UEntity = new UserEntity(user.getId());
             List<HistoryEntity> historyTasks = historyRepository.findByUser(UEntity);
             if(historyTasks.isEmpty()) {
-                //TODO: Log the tasks not found
-                throw new ResourceNotFoundException("Did not find tasks for user: " + user.getId());
+                logger.warn("findHistoryByUser - Did not find history for user: " + user.getId());
+                throw new ResourceNotFoundException("Did not find history for user: " + user.getId());
             }
             for (HistoryEntity history : historyTasks) {
                 History historyModel = new History(history);
                 historyModels.add(historyModel);
             }
         } catch (DataAccessException e) {
-             // TODO: Log the exception
-        }
+            logger.error("findHistoryByUser database error: {}", e.getMessage());
+        } 
         return historyModels;
     }
 
@@ -55,7 +56,7 @@ public class HistoryService {
         try {
             Optional<UserEntity> uEntity = userRepository.findById(task.getUserId());
             if (!uEntity.isPresent()) {
-                //TODO: Log the user not found
+                logger.warn("createHistory - User not found with id " + task.getUserId());
                 throw new ResourceNotFoundException("User not found with id " + task.getUserId());
             }
             HistoryEntity hEntity = new HistoryEntity(task.getName(), 
@@ -67,7 +68,7 @@ public class HistoryService {
             hEntity = historyRepository.save(hEntity);
             return new History(hEntity);
         } catch (DataAccessException e) {
-             // TODO: Log the exception
+            logger.error("createHistory database error: {}", e.getMessage());
             return null;
         }
     }

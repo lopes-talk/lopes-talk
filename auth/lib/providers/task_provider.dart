@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lopes_talk/models/history_task.dart';
 import 'package:lopes_talk/models/journey.dart';
 import 'package:lopes_talk/providers/journey_provider.dart';
 import '../providers/api_service_provider.dart';
@@ -13,11 +14,12 @@ final taskListProvider = FutureProvider.family<List<Task>, Journey>(
   },
 );
 
-final taskListByUserProvider = FutureProvider<Map<String, List<Task>>>(
+final historyTaskListByUserProvider =
+    FutureProvider<Map<String, List<HistoryTask>>>(
   (ref) async {
     final apiService = ref.read(apiServiceProvider);
 
-    final tasks = await apiService.getTasksByUser();
+    final tasks = await apiService.getHistoryTasksByUser();
     return tasks;
   },
 );

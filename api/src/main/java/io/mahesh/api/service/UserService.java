@@ -15,6 +15,9 @@ import io.mahesh.api.exception.FieldValidationException;
 import io.mahesh.api.exception.ResourceNotFoundException;
 import io.mahesh.api.model.Users;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /*
  * Service: User Operations
  */
@@ -23,23 +26,22 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(JourneyPathService.class);
+
     public Users getUser(Users user) throws AuthenticationException { 
-        //TODO move to credentials model - when make spring security
         String username = user.getUserName();
         String password = user.getPassword();
         if(StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-            // TODO: Log that field exception
             throw new FieldValidationException(username, "Username and password required");
         }
         try {
             Optional<UserEntity> uEntity = userRepository.findByUsernameAndPassword(username,password);
             if (!uEntity.isPresent()) {
-                // TODO: Log login failed
                 throw new AuthenticationException("Failed to login user");
             }
             return new Users(uEntity.get());
-        } catch (DataAccessException ex) {
-            // TODO: Log the exception
+        } catch (DataAccessException e) {
+            logger.error("getUser database error: {}", e.getMessage());
         }
         return null;
     }
@@ -48,32 +50,30 @@ public class UserService {
         try {
             Optional<UserEntity> existingUser  = userRepository.findTopByUsername(user.getUserName());
             if (existingUser.isPresent()) {
-                // TODO log that user already exists
                 throw new DuplicateKeyException("Username already exists: " + user.getUserName());
             }
             UserEntity uEntity = new UserEntity(user);
             uEntity = userRepository.save(uEntity);
             return new Users(uEntity);
         } catch (DataAccessException e) {
-            // TODO: Log the exception
+            logger.error("registerUser database error: {}", e.getMessage());
             return null;
         }
     }
 
     public Users findUserById(String id) {
         if(StringUtils.isBlank(id)) {
-            // TODO: Log that field exception
             throw new FieldValidationException(id, "Id is required");
         }
         try {
             Optional<UserEntity> uEntity = userRepository.findById(id);
             if (!uEntity.isPresent()) {
-                //TODO: Log the user not found
+                logger.warn("findUserById - User not found with id " + id);
                 throw new ResourceNotFoundException("User not found with id " + id);
             }
             return new Users(uEntity.get());
         } catch (DataAccessException e) {
-            // TODO: Log the exception
+            logger.error("findUserById database error: {}", e.getMessage());
         }
         return null;
     }
